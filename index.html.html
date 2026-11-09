@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Firstmile</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF6F0;--surface:#fff;--sand:#F1E9DD;--ink:#16303A;--muted:#5B6F76;--line:#E5DCCD;--teal:#0E7C86;--teal-d:#0A5C64;--blue:#1F4E79;--amber:#8A5100;--amber-bg:#FBEBCB;--ok:#1E7A4F;--ok-bg:#DDF2E7;--est-bg:#E2ECF7;--na-bg:#ECE8E1;--err:#A3231B;--err-bg:#FADDDA;--shadow:0 2px 10px rgba(22,48,58,.08),0 12px 28px -18px rgba(22,48,58,.18);--r:20px;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1B20;--surface:#172830;--sand:#1E333C;--ink:#EAF1F2;--muted:#9DB2B8;--line:#2B434D;--teal:#4DC0C9;--teal-d:#7AD3DA;--blue:#8DB8E3;--amber:#F0B45A;--amber-bg:#3A2D14;--ok:#6FD3A0;--ok-bg:#14382A;--est-bg:#1B3350;--na-bg:#2A3A40;--err:#FF9A94;--err-bg:#451C1A;--shadow:none;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1B20;--surface:#172830;--sand:#1E333C;--ink:#EAF1F2;--muted:#9DB2B8;--line:#2B434D;--teal:#4DC0C9;--teal-d:#7AD3DA;--blue:#8DB8E3;--amber:#F0B45A;--amber-bg:#3A2D14;--ok:#6FD3A0;--ok-bg:#14382A;--est-bg:#1B3350;--na-bg:#2A3A40;--err:#FF9A94;--err-bg:#451C1A;--shadow:none;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.5 'DM Sans',system-ui,sans-serif}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;margin:0;line-height:1.2}
+h1{font-size:clamp(1.85rem,6vw,2.5rem);letter-spacing:-.015em}h2{font-size:1.2rem}h3{font-size:1.05rem}p{margin:0}h1:focus,main:focus{outline:none}
+button{font:inherit;color:inherit;cursor:pointer}a{color:var(--teal-d)}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+#app{display:flex;min-height:100vh}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--surface);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
+nav button{flex:1;background:none;border:0;padding:8px 2px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.74rem;color:var(--muted);min-height:52px;transition:background .15s}
+nav button:hover{background:var(--sand)}nav button[aria-current=page]{color:var(--teal-d);font-weight:700;background:var(--sand);box-shadow:inset 0 -3px 0 var(--teal)}
+nav svg{width:22px;height:22px}
+.brand{display:none;align-items:center;gap:10px;font:600 1.4rem Fraunces,Georgia,serif;padding:8px 12px 20px}
+main{flex:1;width:100%;max-width:760px;margin:0 auto;padding:20px 16px 96px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:10px}
+.mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--teal),var(--blue));display:grid;place-items:center}
+.ghost{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:.88rem;min-height:44px}
+.ghost:hover,.chip:hover{background:var(--line)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow)}
+.stack{display:grid;gap:20px}.grid2{display:grid;gap:20px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.hero2{position:relative;border-radius:var(--r);overflow:hidden;color:#fff;background:linear-gradient(180deg,#0A4F63 0%,#1B7585 55%,#E9B97A 100%);padding:24px 24px 150px}
+.hero2 .scene{position:absolute;left:0;right:0;bottom:0;width:100%;height:150px}
+.hero2>div{position:relative}.hero2 p{opacity:.95}
+.rt{display:flex;align-items:center;gap:14px;margin:14px 0 10px}.rt small{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.rt b{font:600 clamp(1.5rem,6vw,2rem) Fraunces,Georgia,serif;line-height:1.1}
+.rt .line{flex:1;min-width:24px;max-width:90px;height:2px;background:repeating-linear-gradient(90deg,#fff 0 6px,transparent 6px 12px);opacity:.7}
+.next{margin-top:14px;background:rgba(255,255,255,.16);border-radius:14px;padding:10px 14px;font-size:.92rem;display:inline-block}
+.btn{background:var(--teal);color:#fff;border:0;border-radius:14px;padding:12px 18px;font-weight:700;min-height:48px}
+[data-theme=dark] .btn:not(.sec):not(.danger){color:#06242A}@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .btn:not(.sec):not(.danger){color:#06242A}}
+.btn.sec{background:var(--sand);color:var(--ink)}.btn.danger{background:var(--err);color:var(--bg)}
+.hero2 .btn{background:#fff;color:#0A5C64;margin-top:16px;box-shadow:0 6px 16px -8px rgba(0,0,0,.4)}.hero2 .btn.sec{background:rgba(255,255,255,.2);color:#fff;box-shadow:none}
+.btn:active,.act:active{transform:scale(.98)}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px;vertical-align:middle;white-space:nowrap}
+.b-live{background:var(--ok-bg);color:var(--ok)}.b-est{background:var(--est-bg);color:var(--blue)}.b-sample{background:var(--amber-bg);color:var(--amber)}.b-na{background:var(--na-bg);color:var(--muted)}.b-err{background:var(--err-bg);color:var(--err)}
+.steps{list-style:none;margin:12px 0 0;padding:0}.steps li{display:flex;gap:12px;padding:10px 0;position:relative}
+.steps li:not(:last-child)::before{content:"";position:absolute;left:13px;top:38px;bottom:-8px;width:2px;background:var(--line)}
+.dot{flex:none;width:28px;height:28px;border-radius:50%;background:var(--sand);color:var(--teal-d);display:grid;place-items:center;font-size:.8rem;font-weight:700}
+.muted,.steps small{color:var(--muted)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{background:var(--sand);border:1.5px solid transparent;border-radius:999px;padding:9px 14px;font-size:.88rem;min-height:44px}
+.chip[aria-pressed=true]{background:var(--teal);color:#fff;border-color:var(--teal)}
+.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.act{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:left;display:grid;gap:6px;min-height:84px;transition:transform .15s,box-shadow .15s}
+.act:hover{transform:translateY(-2px);box-shadow:var(--shadow)}.act b{color:var(--teal-d)}
+.act .ai{width:36px;height:36px;border-radius:12px;background:var(--sand);color:var(--teal-d);display:grid;place-items:center}.act .ai svg{width:20px;height:20px}
+.empty{text-align:center;padding:26px 14px;border:2px dashed var(--line);border-radius:var(--r);color:var(--muted);display:grid;gap:10px;justify-items:center}
+.bar{height:8px;background:var(--sand);border-radius:99px;overflow:hidden;margin:10px 0 6px}.bar i{display:block;height:100%;background:var(--teal)}
+.chk{display:flex;gap:10px;padding:8px 0;align-items:flex-start;min-height:44px}.chk .ic{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:.75rem;font-weight:700;margin-top:2px}
+.chk .y{background:var(--ok-bg);color:var(--ok)}.chk .n{background:var(--sand);color:var(--muted)}
+.chk a{font-weight:700;margin-left:6px;white-space:nowrap}
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}.sw div{border-radius:14px;padding:12px;font-size:.78rem;border:1px solid var(--line);min-height:70px;display:flex;align-items:flex-end}
+.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--teal-d)}.hero2 .eyebrow{color:#fff;opacity:.9}
+.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;z-index:40}.skip:focus{left:8px}
+.fld{display:grid;gap:6px;margin-bottom:16px}.fld label,.lbl{font-weight:700;font-size:.92rem}
+.fld input,.fld select{font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;min-height:48px;width:100%}
+.fld input[aria-invalid=true]{border-color:var(--err)}.err{color:var(--err);font-size:.86rem;font-weight:500}
+.two{display:grid;gap:12px}.stepper{display:flex;gap:8px;margin:0 0 6px}.stepper span{flex:1;height:6px;border-radius:9px;background:var(--line)}.stepper .on{background:var(--teal)}
+.modal-bg{position:fixed;inset:0;background:rgba(10,30,36,.6);display:grid;place-items:center;padding:20px;z-index:30}
+.modal{background:var(--surface);border-radius:var(--r);padding:24px;max-width:440px;width:100%;display:grid;gap:14px}
+.tl{list-style:none;padding:0;margin:8px 0 0}.tl li{display:grid;grid-template-columns:58px 1fr;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.tl time{font-weight:700;color:var(--teal-d);font-size:.9rem}.day{margin:16px 0 0;font-weight:700}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:92px;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:.9rem;z-index:50;max-width:90vw}
+.banner{border-radius:16px;padding:14px 16px;background:var(--amber-bg);color:var(--amber);display:grid;gap:8px}
+.tc{display:grid;gap:8px;cursor:pointer;text-align:left;width:100%;color:inherit}.tc:hover{transform:translateY(-2px)}
+dl{margin:10px 0 0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px}dt{color:var(--muted)}dd{margin:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.msg{display:flex}.msg.u{justify-content:flex-end}.bub{max-width:94%;border-radius:18px;padding:12px 14px;background:var(--sand)}.msg.u .bub{background:var(--ink);color:var(--bg)}.hero2 .btn.sec{color:#fff!important}.pre nav{display:none}.pre main{margin:0 auto!important;max-width:560px;padding-bottom:32px}.ghost svg{width:20px;height:20px;display:block}.sli{display:flex;gap:12px;align-items:center;text-align:left;width:100%;background:none;border:1.5px solid transparent;border-radius:14px;padding:10px;min-height:56px}.sli[aria-current=step]{background:var(--sand);border-color:var(--teal)}.dot.done{background:var(--ok-bg);color:var(--ok)}.jg{display:grid;gap:20px}details{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--bg)}summary{cursor:pointer;font-weight:700;min-height:28px}.ol{margin:8px 0 0;padding-left:20px;display:grid;gap:8px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+@media(min-width:640px){.two{grid-template-columns:1fr 1fr}}
+@media(min-width:900px){.jg{grid-template-columns:290px 1fr}nav{top:0;bottom:auto;right:auto;width:220px;flex-direction:column;border-top:0;border-right:1px solid var(--line);padding:20px 12px;height:100vh}
+nav button{flex:none;flex-direction:row;gap:12px;font-size:.95rem;padding:12px 14px;justify-content:flex-start}
+.brand{display:flex}main{margin-left:220px;max-width:960px;padding:32px 32px 48px}.top .mark{display:none}.grid2{grid-template-columns:1fr 1fr}.actions{grid-template-columns:repeat(4,1fr)}}
+</style></head><body>
+<a class="skip" href="#main" onclick="event.preventDefault();document.getElementById('main').focus()">Skip to content</a>
+<div id="app"><nav id="nav" aria-label="Main"></nav><main id="main" tabindex="-1"></main></div>
+<script>
+// ===== DATA (all sample / user-entered; no live feeds) =====
+const MODES={train:"Train",bus:"Bus",flight:"Flight",car:"Car / other"};
+const CITIES=["Hyderabad","Delhi","Roorkee","Dehradun","Haridwar","Mumbai","Bengaluru","Chennai","Kolkata","Jaipur","Pune","Goa","Ahmedabad","Lucknow"];
+const PURPOSES=["Work","Leisure","Family / visit","Study","Other"],BUDGETS=["Budget","Mid-range","Comfort"];
+const PREFS=["Quiet places","Local food","Culture & history","Nature","Step-free access","Avoid night travel"];
+const sampleTrip=()=>({id:"t-sample",sample:true,from:"Hyderabad",to:"Roorkee",depart:"2026-11-20",ret:"2026-11-23",
+ legs:[{from:"Hyderabad",to:"Delhi",mode:"flight",dep:"2026-11-20T06:00",arr:"2026-11-20T08:30"},{from:"Delhi",to:"Roorkee",mode:"car",dep:"2026-11-20T11:30",arr:"2026-11-20T16:30"}],
+ stay:"",purpose:"Work",budget:"Mid-range",prefs:["Quiet places","Local food"],review:false});
+const DATA={user:{name:"Traveller"},prompts:["What should I sort out first?","How do transfers in Delhi work?","Help me plan a free evening"]};
+const S={trips:[sampleTrip()],active:"t-sample"};let W=null;
+
+// ===== HELPERS =====
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const clone=o=>JSON.parse(JSON.stringify(o));
+const today=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const D=s=>s?new Date(s.length>10?s:s+"T00:00").toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"}):null;
+const Tm=s=>s&&s.length>10?new Date(s).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit",hour12:false}):null;
+const mins=(a,b)=>(a&&b&&a.length>10&&b.length>10)?Math.round((new Date(b)-new Date(a))/6e4):null;
+const buf=(l1,l2)=>{const m=mins(l1.arr,l2.dep);return m===null?null:{m,c:m<30?"risk":m<60?"tight":"ok"}};
+const BUF={ok:["b-live","✓ Comfortable"],tight:["b-sample","! Tight"],risk:["b-err","✕ At risk"]};
+const dur=m=>m<0?"times overlap":`${Math.floor(m/60)}h ${m%60}m`;
+const TAGS={live:["b-live","✓ Live / verified"],est:["b-est","≈ Estimated"],sample:["b-sample","◌ Sample data"],na:["b-na","– Not available"],you:["b-est","✎ You entered"]};
+const badge=k=>`<span class="badge ${TAGS[k][0]}">${TAGS[k][1]}</span>`;
+const bbadge=b=>b?`<span class="badge ${BUF[b.c][0]}">${BUF[b.c][1]} · ${dur(b.m)}</span>`:`<span class="badge b-na">– Add times to compute</span>`;
+const tg=t=>t.sample?"sample":"you";
+const getTrip=id=>S.trips.find(t=>t.id===id);
+const IC={home:'<path d="M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/>',trips:'<path d="M4 7h16v12H4zM9 7V4h6v3"/>',explore:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',ret:'<path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3"/>',ai:'<path d="M4 5h16v11H9l-5 4z"/>',plus:'<path d="M12 5v14M5 12h14"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/>'};
+const svg=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]}</svg>`;
+const NAV=[["home","Home","home"],["trips","Trips","trips"],["explore","Explore","explore"],["return","Return","ret"],["companion","Companion","ai"]];
+
+// ===== DERIVED TRIP LOGIC =====
+function stages(t){const L=t.legs,g=tg(t),s=[];if(!L.length)return s;
+ s.push({n:"Depart",t:`Leave ${esc(L[0].from)}`,time:Tm(L[0].dep),next:"Head to your departure point with time to spare.",tag:g});
+ L.forEach((l,i)=>{s.push({n:"Travel",t:`${MODES[l.mode]}: ${esc(l.from)} → ${esc(l.to)}`,time:[Tm(l.dep),Tm(l.arr)].filter(Boolean).join(" – ")||null,next:"Keep your booking details handy and check the operator’s official source for updates.",f:["Service number","Platform / gate"],tag:g});
+  const n=L[i+1];if(n){const b=buf(l,n);s.push({n:"Transfer",t:`Change at ${esc(l.to)}`,b:b||1,next:"Allow time to move between departure points. Check station or terminal displays, or ask staff.",f:["Platform / gate","Walking time between points"],tag:b?g:"na"})}});
+ const z=L[L.length-1];
+ s.push({n:"Arrive",t:`Arrive in ${esc(z.to)}`,time:Tm(z.arr),next:"Keep your belongings together and review your onward plan.",tag:g});
+ s.push({n:"Reach destination",t:t.stay?esc(t.stay):"Your stay",next:t.lm?`Planned: ${LMO[t.lm.opt].n} (sample estimate).`:"Compare last-mile options before you land.",tag:t.stay?g:"na"});
+ return s}
+function itin(t){const ev=[],L=t.legs,last=L[L.length-1];
+ L.forEach((l,i)=>{ev.push({d:(l.dep||"").slice(0,10)||t.depart,w:l.dep,t:`Depart ${esc(l.from)}`,s:`${MODES[l.mode]} to ${esc(l.to)}`});
+  const n=L[i+1];if(n)ev.push({d:(l.arr||"").slice(0,10)||t.depart,w:l.arr,t:`Transfer at ${esc(l.to)}`,s:`Next leg: ${MODES[n.mode]} to ${esc(n.to)}`,b:buf(l,n)||1});
+  else ev.push({d:(l.arr||"").slice(0,10)||t.depart,w:l.arr,t:`Arrive in ${esc(l.to)}`,s:"Final leg complete"})});
+ if(last)ev.push({d:(last.arr||"").slice(0,10)||t.depart,w:last.arr?last.arr+"~":null,t:`Reach ${t.stay?esc(t.stay):"your stay"}`,s:t.lm?`Via ${LMO[t.lm.opt].n} (sample estimate)`:"Compare last-mile options"});
+ if(t.ret)ev.push({d:t.ret,w:null,t:`Return day: head back to ${esc(t.from)}`,s:"Your return plan arrives in a later stage"});
+ if(t.rp&&!t.rp.done){const c=rpcalc(t.rp);ev.push({d:t.rp.day,w:t.rp.day+"T"+hm(c.lv),t:`Leave by ${hm(c.lv)} to be back by ${t.rp.target}`,s:`Return via ${LMO[t.rp.pref].n} (estimated)`})}(t.extra||[]).forEach(x=>{const p=PL(x.p);if(p)ev.push({d:x.d,w:x.tm?x.d+"T"+x.tm:null,x:x.p,t:p.n,s:"Added from Explore · sample place"})});const g={};ev.sort((a,b)=>a.d<b.d?-1:a.d>b.d?1:(a.w||"~")<(b.w||"~")?-1:1).forEach(e=>(g[e.d]=g[e.d]||[]).push(e));return g}
+function complete(t){const L=t.legs;return[
+ {ok:L.length&&L.every(l=>l.dep&&l.arr),t:"Add departure and arrival times for every leg"},
+ {ok:!!(L.length&&L[L.length-1].arr),t:"Add your arrival time to unlock last-mile options"},
+ {ok:!!t.stay,t:"Add your stay address"},{ok:!!t.ret,t:"Add a return date"},
+ {ok:!!(t.purpose||t.budget||t.prefs.length),t:"Choose your travel preferences"},{ok:!!t.rp,t:"Create your return plan",go:"return"}]}
+function changes(a,b){const o=[],f=(l,x,y,core)=>{if((x||"")!==(y||""))o.push({l,x,y,core})};
+ f("Start",a.from,b.from.trim(),1);f("Destination",a.to,b.to.trim(),1);f("Departure date",a.depart,b.depart,1);f("Return date",a.ret,b.ret,1);
+ if(JSON.stringify(a.legs)!==JSON.stringify(b.legs))o.push({l:"Legs and times",x:`${a.legs.length} leg(s)`,y:`${b.legs.length} leg(s), updated`,core:1});
+ f("Stay",a.stay,b.stay);f("Purpose",a.purpose,b.purpose);f("Budget",a.budget,b.budget);f("Preferences",a.prefs.join(", "),b.prefs.join(", "));return o}
+
+// ===== COMPONENTS =====
+const Scene=()=>`<svg class="scene" viewBox="0 0 400 150" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+<circle cx="312" cy="44" r="20" fill="#FFE2A6"/><circle cx="312" cy="44" r="32" fill="#FFE2A6" opacity=".25"/>
+<path d="M88 30q4-5 8 0q4-5 8 0M120 46q3-4 6 0q3-4 6 0" stroke="#fff" fill="none" opacity=".8" stroke-width="1.5"/>
+<path d="M0 112L60 58l45 38 55-58 70 66 60-36 60 30 50-26v68H0z" fill="#2F7C97" opacity=".85"/>
+<path d="M160 38l-13 18 10-4 8 6 7-6 6 4z" fill="#fff" opacity=".85"/>
+<path d="M0 126Q70 92 140 120T290 112T400 122V150H0z" fill="#17695F"/>
+<path d="M0 142Q100 120 200 138T400 130V150H0z" fill="#0E4F4A"/>
+<path d="M120 150Q160 140 200 134T268 128" stroke="#F1DFBE" stroke-width="5" fill="none" stroke-linecap="round" opacity=".9"/>
+<g fill="#0B3F3B"><path d="M40 134l9-24 9 24z"/><path d="M58 136l7-18 7 18z"/><path d="M345 128l8-22 8 22z"/><path d="M362 130l6-16 6 16z"/></g>
+<g><path d="M203 129v-8M207 129v-8" stroke="#082C2A" stroke-width="2.2" stroke-linecap="round"/><rect x="200" y="112" width="9" height="12" rx="3.5" fill="#F7F3EA"/><rect x="195.5" y="113" width="6" height="9" rx="2" fill="#E9A23B"/><circle cx="204.5" cy="107.5" r="3.8" fill="#F3D2B0"/><path d="M201 105.5q3.5-4 7 0" fill="#6B3F1D"/><path d="M212 111v21" stroke="#D9B36A" stroke-width="1.6" stroke-linecap="round"/></g></svg>`;
+const Mark=()=>`<span class="mark" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="6" cy="18" r="2"/><path d="M8 17c5-1 3-8 8-9"/><path d="M16 5l3 3-3 3"/></svg></span>`;
+const Top=(x="")=>`<div class="top"><div class="row" style="flex-wrap:nowrap">${Mark()}<b style="font:600 1.25rem Fraunces,Georgia,serif">Firstmile</b></div><div class="row" style="flex-wrap:nowrap">${x}<button class="ghost" aria-label="Settings" onclick="go('settings')">${svg("gear")}</button></div></div>`;
+const Back=(h,l="← Back")=>`<button class="ghost" onclick="go('${h}')">${l}</button>`;
+const Soon=(t,m)=>`${Top()}<h1>${t}</h1><div class="empty" style="margin-top:18px"><h3 style="color:var(--ink)">Coming in a later stage</h3><p>${m}</p></div>`;
+const Route=t=>`<div class="rt"><div><small>From</small><b>${esc(t.from)}</b></div><span class="line" aria-hidden="true"></span><div><small>To</small><b>${esc(t.to)}</b></div></div>`;
+const Dates=t=>`${D(t.depart)||"Date not set"}${t.ret?` → ${D(t.ret)}`:""}`;
+const Via=t=>t.legs.length>1?"via "+t.legs.slice(0,-1).map(l=>esc(l.to)).join(", ")+" · ":"";
+const Checklist=(t,edit=1)=>{const c=complete(t),n=c.filter(x=>x.ok).length;
+ return`<div class="bar" role="progressbar" aria-valuenow="${n}" aria-valuemax="${c.length}" aria-label="Trip completeness"><i style="width:${n/c.length*100}%"></i></div><small class="muted">${n} of ${c.length} done</small>`+
+ c.map(x=>`<div class="chk"><span class="ic ${x.ok?"y":"n"}" aria-hidden="true">${x.ok?"✓":"•"}</span><span>${x.t}${x.ok?'<span class="muted"> (done)</span>':edit?`<a href="#" onclick="event.preventDefault();${x.go?`go('${x.go}')`:`editTrip('${t.id}')`}">Add</a>`:""}</span></div>`).join("")};
+const Steps=a=>`<ol class="steps">${a.map((x,i)=>`<li><span class="dot">${i+1}</span><div><b>${x.n}</b> ${badge(x.tag)}<br><span>${x.t}</span>${x.b?` ${bbadge(x.b===1?null:x.b)}`:""}<br><small>${x.time||(x.b?"":"Time not set")}</small>${x.f?`<br><small>${x.f.map(f=>`${f}: Not available`).join(" · ")}</small>`:""}<br><small>Next: ${x.next}</small></div></li>`).join("")}</ol>`;
+
+// ===== VIEWS =====
+function Home(){const t=getTrip(S.active)||S.trips[0];
+ if(!t)return`${Top('<button class="ghost" onclick="go(\'design\')">Design system</button>')}<p class="eyebrow">Hello, ${esc(DATA.user.name)}</p><h1 style="margin:6px 0 24px">Ready when you are.</h1>${Empty()}`;
+ const c=complete(t),nx=c.find(x=>!x.ok),st=stages(t).map(s=>({t:s.n+": "+s.t.replace(/&amp;/g,"&"),d:s.time||"Time not set",tag:s.tag}));
+ return`${Top('<button class="ghost" onclick="go(\'design\')">Design system</button>')}
+<p class="eyebrow">Hello, ${esc(DATA.user.name)}</p><h1 style="margin:6px 0 24px">Ready when you are.</h1><div class="stack">${S.guest?GuestBanner():""}
+<section class="hero2" aria-label="Current trip"><div>${t.sample?'<span class="badge" style="background:#fff;color:#8A5100">◌ Sample trip</span>':""}${Route(t)}<p>${Via(t)}${esc(t.purpose||"Trip")} · ${Dates(t)}</p>${nx?`<div class="next"><b>Next step:</b> ${nx.t}</div><br>`:""}<div class="row"><button class="btn" onclick="go('trip/${t.id}')">Open trip</button><button class="btn sec" onclick="go('journey/${t.id}')">Journey steps</button></div></div>${Scene()}</section>
+<div class="actions">
+<button class="act" onclick="newTrip()"><span class="ai">${svg("plus")}</span><b>New trip</b><small class="muted">Plan from start to stay</small></button>
+<button class="act" onclick="go('explore')"><span class="ai">${svg("explore")}</span><b>Explore nearby</b><small class="muted">Places & free time</small></button>
+<button class="act" onclick="go('return')"><span class="ai">${svg("ret")}</span><b>Return plan</b><small class="muted">Plan your way back</small></button>
+<button class="act" onclick="go('freetime')"><span class="ai">${svg("clock")}</span><b>Free time</b><small class="muted">Fit places into a window</small></button></div>
+<div class="grid2"><section class="card"><h2>Journey at a glance</h2><p class="muted" style="margin-top:4px">Times are the ones entered for this trip. Nothing is live.</p>
+<ol class="steps">${st.map((x,i)=>`<li><span class="dot">${i+1}</span><div><b>${x.t}</b> ${badge(x.tag)}<br><small>${x.d}</small></div></li>`).join("")}</ol></section>
+<div class="stack" style="align-content:start"><section class="card"><h2>Trip readiness</h2><div style="margin-top:8px">${Checklist(t)}</div></section>
+<section class="card"><h2>Ask your Companion</h2><p class="muted" style="margin:4px 0 12px">Guidance based on the trip shown here.</p><div class="chips">${DATA.prompts.map(p=>`<button class="chip" onclick="qa('${p}')">${p}</button>`).join("")}</div></section></div></div>
+${SavedSec()}</div>`}
+
+const Empty=()=>`<div class="empty"><div style="width:100%;max-width:320px;border-radius:16px;overflow:hidden;position:relative;height:130px;background:linear-gradient(180deg,#0A4F63,#1B7585 55%,#E9B97A)">${Scene()}</div><h3 style="color:var(--ink)">No trips yet</h3><p>Add your route once and Firstmile guides each step.</p><div class="row" style="justify-content:center"><button class="btn" onclick="newTrip()">Start a trip</button><button class="btn sec" onclick="trySample()">Try sample trip</button></div></div>`;
+function Trips(){return`${Top(S.trips.length?'<button class="btn" onclick="newTrip()">＋ New trip</button>':"")}<h1 style="margin-bottom:18px">Your trips</h1><div class="stack">
+${W&&W.mode==="new"?`<div class="banner"><b>Draft saved</b><span>${esc(W.d.from||"New")} → ${esc(W.d.to||"…")}. Pick up where you left off.</span><div class="row"><button class="btn" onclick="go('new')">Resume draft</button><button class="btn sec" onclick="W=null;render()">Discard</button></div></div>`:""}
+${S.trips.length?S.trips.map(t=>`<button class="card tc" onclick="go('trip/${t.id}')" aria-label="Open trip ${esc(t.from)} to ${esc(t.to)}"><div class="row">${t.sample?badge("sample"):""}${t.review?'<span class="badge b-sample">! Needs review</span>':""}</div><h2>${esc(t.from)} → ${esc(t.to)}</h2><span class="muted">${Via(t)}${Dates(t)} · ${t.legs.length} leg${t.legs.length>1?"s":""}</span></button>`).join(""):Empty()}</div>`}
+
+function Trip(id){const t=getTrip(id),L=t.legs;
+ return`${Top(Back("trips","← Trips"))}<div class="stack">
+<section class="hero2"><div>${t.sample?'<span class="badge" style="background:#fff;color:#8A5100">◌ Sample trip</span>':""}<h1 class="sr">Trip overview</h1><p class="eyebrow" style="margin-top:10px" aria-hidden="true">Trip overview</p>${Route(t)}<p>${Via(t)}${Dates(t)}</p>
+<div class="row"><button class="btn" onclick="go('journey/${t.id}')">Journey steps</button><button class="btn sec" onclick="editTrip('${t.id}')">Edit trip</button><button class="btn sec" onclick="askDelete('${t.id}')">Delete</button></div></div>${Scene()}</section>
+${t.review?`<div class="banner" role="status"><b>Needs review</b><span>You changed the route, dates or legs. Check your itinerary and return plan before you travel.</span><div><button class="btn sec" onclick="getTrip('${t.id}').review=false;render();toast('Marked as reviewed')">Mark as reviewed</button></div></div>`:""}
+<div class="grid2"><div class="stack" style="align-content:start">
+<section class="card"><h2>Journey stages</h2><p class="muted" style="margin-top:4px">Unsourced details say “Not available”. We never guess.</p>${Steps(stages(t))}</section>
+<section class="card"><h2>Itinerary</h2>${Object.entries(itin(t)).map(([d,es])=>`<p class="day">${D(d)}</p><ul class="tl">${es.map(e=>`<li><time>${Tm(e.w&&e.w.replace("~",""))||"—"}</time><div><b>${e.t}</b>${e.b?` ${bbadge(e.b===1?null:e.b)}`:""}<br><small class="muted">${e.s}</small>${e.x?`<br><button class="ghost" onclick="rmExtra('${t.id}','${e.x}','${e.d}')">Remove</button>`:""}</div></li>`).join("")}</ul>`).join("")}</section></div>
+<div class="stack" style="align-content:start">
+<section class="card"><h2>Completeness</h2><div style="margin-top:8px">${Checklist(t)}</div></section>
+<section class="card"><h2>Trip details</h2><dl><dt>Purpose</dt><dd>${esc(t.purpose||"Not set")}</dd><dt>Budget</dt><dd>${esc(t.budget||"Not set")}</dd><dt>Stay</dt><dd>${esc(t.stay||"Not set")}</dd><dt>Preferences</dt><dd>${t.prefs.length?t.prefs.map(esc).join(", "):"Not set"}</dd></dl></section>
+<section class="card"><h2>Next up</h2><div class="row" style="margin-top:12px"><button class="chip" onclick="go('freetime')">Free-time planner</button><button class="chip" onclick="go('lastmile/${t.id}')">Last-mile options</button><button class="chip" onclick="go('return')">Return plan</button><button class="chip" onclick="go('explore')">Explore nearby</button><button class="chip" onclick="go('companion')">Ask Companion</button></div></section></div></div></div>`}
+
+// ----- wizard -----
+const F=(id,label,html,err)=>`<div class="fld"><label for="${id}">${label}</label>${html}${err?`<span class="err" id="${id}-e" role="alert">! ${err}</span>`:""}</div>`;
+const inp=(id,v,set,type="text",x="",e)=>`<input id="${id}" type="${type}" value="${esc(v)}" ${type==="text"?'list="cities" autocomplete="off"':""} ${x} ${e?`aria-invalid="true" aria-describedby="${id}-e"`:""} oninput="${set}=this.value">`;
+const sel=(id,v,set,opts,blank)=>`<select id="${id}" onchange="${set}=this.value">${blank?`<option value="">${blank}</option>`:""}${(Array.isArray(opts)?opts.map(o=>[o,o]):Object.entries(opts)).map(([k,l])=>`<option value="${k}" ${v===k?"selected":""}>${l}</option>`).join("")}</select>`;
+function Wizard(){const d=W.d,e=W.e||{},s=W.step,edit=W.mode==="edit";let body="";
+ if(s===1)body=`<p class="muted" style="margin-bottom:16px">Required: start, destination and departure date. Suggestions are sample data (3+ characters).</p>
+ ${F("f","Where are you starting from?",inp("f",d.from,"W.d.from","text","",e.from),e.from)}${F("t","Where are you going?",inp("t",d.to,"W.d.to","text","",e.to),e.to)}
+ <div class="two">${F("dd","Departure date",inp("dd",d.depart,"W.d.depart","date",`min="${today()}"`,e.depart),e.depart)}${F("rd","Return date (optional)",inp("rd",d.ret,"W.d.ret","date",`min="${d.depart||today()}"`,e.ret),e.ret)}</div>`;
+ if(s===2)body=`<p class="muted" style="margin-bottom:16px">Add each leg in order. Times are optional now, but unlock buffers and last-mile options.</p>${d.legs.map((l,i)=>`<fieldset class="card" style="margin-bottom:16px;border:1px solid var(--line)"><legend class="lbl" style="padding:0 6px">Leg ${i+1}</legend>
+ <div class="two">${F("lf"+i,"From",inp("lf"+i,l.from,`W.d.legs[${i}].from`,"text","",e["l"+i]))}${F("lt"+i,"To",inp("lt"+i,l.to,`W.d.legs[${i}].to`,"text","",e["l"+i]))}</div>
+ ${F("lm"+i,"Travel mode",sel("lm"+i,l.mode,`W.d.legs[${i}].mode`,MODES))}
+ <div class="two">${F("ld"+i,"Departs",inp("ld"+i,l.dep,`W.d.legs[${i}].dep`,"datetime-local"))}${F("la"+i,"Arrives",inp("la"+i,l.arr,`W.d.legs[${i}].arr`,"datetime-local"))}</div>
+ ${e["l"+i]?`<p class="err" role="alert">! ${e["l"+i]}</p>`:""}${d.legs.length>1?`<button class="ghost" onclick="rmLeg(${i})">Remove leg</button>`:""}</fieldset>`).join("")}<button class="btn sec" onclick="addLeg()">＋ Add a leg (e.g. a transfer city)</button>`;
+ if(s===3)body=`<p class="muted" style="margin-bottom:16px">Everything here is optional. Skip it and add details later.</p>
+ ${F("st","Stay or final address",inp("st",d.stay,"W.d.stay","text",'list="" autocomplete="street-address"'))}
+ <div class="two">${F("pu","Purpose",sel("pu",d.purpose,"W.d.purpose",PURPOSES,"Not set"))}${F("bu","Budget band",sel("bu",d.budget,"W.d.budget",BUDGETS,"Not set"))}</div>
+ <p class="lbl" id="pl">Preferences</p><div class="chips" role="group" aria-labelledby="pl" style="margin-top:8px">${PREFS.map(p=>`<button type="button" class="chip" aria-pressed="${d.prefs.includes(p)}" onclick="tpref(this,'${p}')">${p}</button>`).join("")}</div>`;
+ return`${Top(`<button class="ghost" onclick="go('${edit?"trip/"+W.id:"trips"}')">${edit?"Cancel":"Save draft & exit"}</button>`)}
+ <p class="eyebrow">${edit?"Edit trip":"New trip"} · Step ${s} of 3</p><div class="stepper" aria-hidden="true">${[1,2,3].map(i=>`<span class="${i<=s?"on":""}"></span>`).join("")}</div>
+ <h1 style="margin:10px 0 18px">${["","Your route","Your legs","Trip details"][s]}</h1><datalist id="cities">${CITIES.map(c=>`<option value="${c}">`).join("")}</datalist>
+ <div class="card">${body}<div class="row" style="margin-top:8px">${s>1?`<button class="btn sec" onclick="wback()">Back</button>`:""}<button class="btn" onclick="wnext()">${s<3?"Continue":edit?"Save changes":"Create trip"}</button>${s===3?`<button class="ghost" onclick="wskip()">Skip details</button>`:""}</div>
+ <p class="muted" style="margin-top:12px;font-size:.85rem">✓ Draft saved automatically</p></div>`}
+
+const VIEWS={home:Home,design:Design,trips:Trips,new:Wizard,edit:Wizard,trip:Trip,
+ explore:Explore,journey:Journey,lastmile:LastMile,place:Place,
+ return:Return,
+ companion:Companion,settings:Settings,saved:Saved,welcome:Welcome,signin:SignIn,setup:Setup,freetime:FreeTime};
+function Design(){const sw=[["Teal","#0E7C86","#fff"],["Deep teal","#0A5C64","#fff"],["Blue","#1F4E79","#fff"],["Warm bg","#FAF6F0","#16303A"],["Sand","#F1E9DD","#16303A"],["Ink","#16303A","#fff"],["Amber","#8A5100","#fff"],["Success","#1E7A4F","#fff"]];
+ return`${Top(Back("home"))}<h1>Design system</h1><p class="muted" style="margin:4px 0 16px">Calm, warm, trustworthy. Light and dark follow your device.</p><div class="stack">
+<section class="card"><h2>Colour</h2><div class="sw" style="margin-top:12px">${sw.map(s=>`<div style="background:${s[1]};color:${s[2]}">${s[0]}<br>${s[1]}</div>`).join("")}</div></section>
+<section class="card"><h2>Type</h2><h1 style="margin-top:10px">Fraunces: headings</h1><p>DM Sans for body, clear at 16px and above.</p><p class="muted">Muted text for secondary detail.</p></section>
+<section class="card"><h2>Data labels</h2><p class="muted" style="margin:4px 0 12px">Every fact shows its trust level with text and an icon.</p><div class="chips">${["live","est","sample","na","you"].map(badge).join("")}</div></section>
+<section class="card"><h2>Buttons & chips</h2><div class="chips" style="margin-top:12px"><button class="btn">Primary</button><button class="btn sec">Secondary</button><button class="ghost">Ghost</button><button class="chip">Chip</button></div></section>
+<section class="card"><h2>States</h2><div class="stack" style="margin-top:12px"><div class="empty">Empty state</div><div class="banner" style="background:var(--ok-bg);color:var(--ok)">✓ Success: trip saved</div><div class="banner" style="background:var(--err-bg);color:var(--err)">! Error: couldn’t load. Try again.</div></div></section></div>`}
+
+// ===== ACTIONS =====
+function modal(h){closeModal();const b=document.createElement("div");b.className="modal-bg";b.id="mb";b.innerHTML=`<div class="modal" role="dialog" aria-modal="true">${h}</div>`;b.onclick=e=>{if(e.target===b)closeModal()};document.body.append(b);b.querySelector("button")?.focus()}
+const closeModal=()=>document.getElementById("mb")?.remove();
+addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+function go(v){location.hash=v}
+function toast(m){const t=document.createElement("div");t.className="toast";t.setAttribute("role","status");t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2400)}
+function newTrip(){if(!W||W.mode!=="new")W={mode:"new",step:1,e:{},d:{from:"",to:"",depart:"",ret:"",legs:[],stay:"",purpose:"",budget:S.def.budget,prefs:[...S.def.prefs]}};go("new");render()}
+function editTrip(id,s=1){const t=getTrip(id);W={mode:"edit",id,step:s,e:{},d:clone(t),orig:clone(t)};go("edit");render()}
+function trySample(){if(!getTrip("t-sample"))S.trips.unshift(sampleTrip());S.active="t-sample";toast("Sample trip added");go("trip/t-sample");render()}
+function tpref(el,p){const a=W.d.prefs,i=a.indexOf(p);i<0?a.push(p):a.splice(i,1);el.setAttribute("aria-pressed",i<0)}
+function addLeg(){const L=W.d.legs,l=L[L.length-1];L.push({from:l?l.to:W.d.from,to:l&&l.to!==W.d.to?W.d.to:"",mode:"train",dep:"",arr:""});render()}
+function rmLeg(i){W.d.legs.splice(i,1);render()}
+function wback(){W.step--;W.e={};render();scrollTo(0,0)}
+function wskip(){W.step=3;wnext(1)}
+function wnext(skip){const d=W.d,e={};
+ if(W.step===1){if(!d.from.trim())e.from="Tell us where you’re starting from.";if(!d.to.trim())e.to="Add your destination.";else if(d.from.trim().toLowerCase()===d.to.trim().toLowerCase())e.to="Destination can’t be the same as your start.";
+  if(!d.depart)e.depart="Choose your departure date.";else if(d.depart<today())e.depart="That date has passed. Pick today or later.";
+  if(d.ret&&d.depart&&d.ret<d.depart)e.ret="Return should be on or after your departure date."}
+ if(W.step===2)d.legs.forEach((l,i)=>{const m=mins(l.dep,l.arr),p=i?mins(d.legs[i-1].arr,l.dep):null;
+  if(!l.from.trim()||!l.to.trim())e["l"+i]="Add both places for this leg.";else if(m!==null&&m<=0)e["l"+i]="Arrival should be after departure.";else if(p!==null&&p<0)e["l"+i]="This leg leaves before the previous one arrives."});
+ W.e=e;if(Object.keys(e).length){render();document.querySelector("[aria-invalid=true],.err")?.closest(".fld,fieldset")?.querySelector("input,select")?.focus();return}
+ if(W.step===1){if(!d.legs.length)d.legs=[{from:d.from,to:d.to,mode:"train",dep:"",arr:""}];else if(d.legs.length===1){d.legs[0].from=d.from;d.legs[0].to=d.to}}
+ if(W.step===3||skip)return finish();W.step++;render();scrollTo(0,0)}
+function finish(){const d=W.d;
+ if(W.mode==="new"){const dup=S.trips.find(t=>t.from.toLowerCase()===d.from.trim().toLowerCase()&&t.to.toLowerCase()===d.to.trim().toLowerCase()&&d.depart<=(t.ret||t.depart)&&(d.ret||d.depart)>=t.depart);
+  if(dup)return modal(`<h2>You may already have this trip</h2><p class="muted">${esc(dup.from)} → ${esc(dup.to)} on overlapping dates.</p><div class="row"><button class="btn" onclick="closeModal();W=null;go('trip/${dup.id}')">Open existing</button><button class="btn sec" onclick="commit()">Create anyway</button></div>`);
+  return commit()}
+ const c=changes(W.orig,d);if(!c.length)return commit();
+ modal(`<h2>Review your changes</h2><ul style="margin:0;padding-left:18px">${c.map(x=>`<li><b>${x.l}:</b> ${esc(x.x||"not set")} → ${esc(x.y||"not set")}</li>`).join("")}</ul>${c.some(x=>x.core)?'<p class="muted">Your itinerary and return plan will be marked “Needs review”. Nothing is deleted.</p>':""}<div class="row"><button class="btn" onclick="commit()">Apply changes</button><button class="btn sec" onclick="closeModal()">Keep editing</button></div>`)}
+function commit(){const d=W.d,c={...clone(d),from:d.from.trim(),to:d.to.trim()};
+ if(W.mode==="new"){c.id="t"+Date.now();c.review=false;S.trips.unshift(c);S.active=c.id}
+ else{const i=S.trips.findIndex(t=>t.id===W.id);c.sample=S.trips[i].sample;c.review=S.trips[i].review||changes(W.orig,d).some(x=>x.core);if(c.rp&&changes(W.orig,d).some(x=>x.core))c.rp.review=true;S.trips[i]=c}
+ const m=W.mode;W=null;closeModal();toast(m==="new"?"Trip created":"Changes saved");go("trip/"+c.id);render()}
+function askDelete(id){const t=getTrip(id);modal(`<h2>Delete this trip?</h2><p class="muted">${esc(t.from)} → ${esc(t.to)} and its itinerary will be removed. This can’t be undone.</p><div class="row"><button class="btn danger" onclick="delTrip('${id}')">Delete trip</button><button class="btn sec" onclick="closeModal()">Keep trip</button></div>`)}
+function delTrip(id){S.trips=S.trips.filter(t=>t.id!==id);if(S.active===id)S.active=S.trips[0]?.id;closeModal();toast("Trip deleted");go("trips");render()}
+
+// ===== STAGES 5-6: JOURNEY, LAST-MILE, EXPLORE (sample data only) =====
+const J={},LMS={km:5,sort:"cost"},X={city:null,cat:"All",bud:0,km:0,sort:"near"};S.saved=[];
+const jst=id=>J[id]||(J[id]={cur:0,done:{},chk:{},delay:{}});
+function jsteps(t){let c=0;return stages(t).map(s=>{const o={...s,k:s.n};if(s.n==="Travel")o.li=c++;if(s.n==="Transfer")o.li=c-1;return o})}
+const CHK={Depart:["ID and booking details ready","Booking saved so you can open it offline","Leave with time to spare"],Travel:["Booking details within reach","Check the operator’s official source for updates","Note where you arrive and what comes next"],Transfer:["Know where your next departure point is","Keep ID and booking ready","Stay with your belongings"],Arrive:["Collect all belongings","Confirm your onward plan","Check the time buffer for your next step"],"Reach destination":["Have your stay address ready to show a driver","Let someone you trust know you’ve arrived (optional)","Choose your last-mile transport"]};
+const HINT={flight:"Follow signs for baggage claim, then ground transport or connections.",train:"Follow signs for exits or connections. Use footbridges or subways, never cross the tracks.",bus:"Wait until the bus stops fully, then collect luggage from the hold.",car:"Agree your drop-off point with the driver in advance."};
+const FB=[["Check official updates","Use the operator’s website, app or helpline. Firstmile doesn’t show live status."],["Tell staff about your connection","Station or terminal staff may be able to advise. Help isn’t guaranteed."],["Look at later departures for your next leg","Check official sources. Availability and fares are unavailable here."],["Consider another way for the next leg","For example a bus or a pre-booked cab. Costs and availability aren’t shown here."],["Tell your host or someone you trust","Share your new expected arrival so they can plan around it."]];
+function jgo(id,i){jst(id).cur=i;render();document.getElementById("jd")?.scrollIntoView?.({block:"start"})}
+function jnext(id){const j=jst(id),N=jsteps(getTrip(id)).length;j.done[j.cur]=1;if(j.cur<N-1)j.cur++;else toast("All steps complete. Safe travels!");render()}
+function jchk(id,k){const j=jst(id);j.chk[k]=!j.chk[k];render()}
+function jdelay(id,li){const v=document.getElementById("dl").value;if(!v){toast("Enter a new expected arrival first");return}jst(id).delay[li]=v;render()}
+function jreset(id,li){delete jst(id).delay[li];render()}
+
+function StepDetail(t,st,c,j){const s=st[c],L=t.legs,id=t.id,k=s.k,N=st.length;let b="";
+ const ck=(CHK[k]||[]).map((x,i)=>{const key=c+"-"+i;return`<label class="chk" style="cursor:pointer"><input type="checkbox" ${j.chk[key]?"checked":""} onchange="jchk('${id}','${key}')" style="width:22px;height:22px;accent-color:var(--teal);margin-top:2px"><span>${x}</span></label>`}).join("");
+ if(k==="Travel"){const l=L[s.li];b=`<dl><dt>Route</dt><dd>${esc(l.from)} → ${esc(l.to)}</dd><dt>Mode</dt><dd>${MODES[l.mode]}</dd><dt>Departs</dt><dd>${Tm(l.dep)||"Not set"} ${l.dep?badge(tg(t)):""}</dd><dt>Arrives</dt><dd>${Tm(l.arr)||"Not set"} ${l.arr?badge(tg(t)):""}</dd><dt>Service number</dt><dd>${badge("na")}</dd><dt>Platform / gate</dt><dd>${badge("na")}</dd></dl><p class="muted" style="margin-top:10px">Best next action: check the operator’s official website, app or helpline for this service.</p>`}
+ if(k==="Transfer"){const l1=L[s.li],l2=L[s.li+1],dl=j.delay[s.li],arr=dl||l1.arr,bf=buf({arr},l2),cl=bf?bf.c:"ok",n=cl==="ok"?1:cl==="tight"?3:5+(t.prefs.includes("Avoid night travel")?1:0);
+  const fb=FB.concat([["You chose “Avoid night travel”","If this delay pushes you into late hours, consider an earlier alternative for the next leg."]]).slice(0,n);
+  b=`<div class="card" style="box-shadow:none"><h3>Time buffer</h3><div style="margin:8px 0">${bbadge(bf)}</div><dl><dt>You arrive</dt><dd>${Tm(arr)||"Not set"} <span class="muted">${dl?"(delayed estimate)":"(you entered)"}</span></dd><dt>Next leg departs</dt><dd>${Tm(l2.dep)||"Not set"}</dd><dt>Buffer</dt><dd>${bf?dur(bf.m):"Add times to compute"}</dd></dl>
+  <p class="muted" style="font-size:.86rem;margin-top:8px">${badge("est")} Guideline: Tight under 60 min, At risk under 30 min. Sample thresholds, to be confirmed.</p><p class="lbl" style="margin-top:12px">Your buffer needs to cover</p><ul class="ol"><li>Leaving the vehicle and collecting luggage</li><li>Moving between your arrival and next departure points ${badge("na")}</li><li>Queues, check-in or boarding cut-offs ${badge("na")}</li></ul></div>
+  <h3 style="margin-top:20px">Changing in ${esc(l1.to)}: ${MODES[l1.mode]} → ${MODES[l2.mode]} ${badge("sample")}</h3><p class="muted" style="margin-top:4px">General guidance, not specific to this station.</p>
+  <ol class="ol"><li>${HINT[l1.mode]}</li><li>Find the departure point for your next leg. Check the official display boards or ask staff.</li><li>Confirm the departure time and platform or gate on the display, not from an old screenshot.</li><li>Keep your ticket or booking and ID ready for checks.</li><li>${HINT[l2.mode]}</li></ol>
+  <div class="card" style="box-shadow:none;margin-top:16px"><h3>My leg is delayed</h3><div class="fld" style="margin:10px 0"><label for="dl">New expected arrival</label><input id="dl" type="datetime-local" value="${arr||""}"></div><div class="row"><button class="btn" onclick="jdelay('${id}',${s.li})">Recalculate</button>${dl?`<button class="btn sec" onclick="jreset('${id}',${s.li})">Reset</button>`:""}</div></div>
+  <h3 style="margin-top:20px">${cl==="ok"?"If plans change":"Fallback options"} ${badge("sample")}</h3><div class="stack" style="gap:8px;margin-top:8px">${fb.map(f=>`<details><summary>${f[0]}</summary><p class="muted" style="margin-top:6px">${f[1]}</p></details>`).join("")}</div>`}
+ const done=j.done[c];
+ return`<section class="card" id="jd"><div class="row"><span class="eyebrow">Step ${c+1} of ${N} · ${k}</span>${badge(s.tag)}${done?'<span class="badge b-live">✓ Done</span>':""}</div><h2 style="margin:8px 0 2px">${s.t}</h2>${k!=="Transfer"?`<p class="muted">${s.time?"Time: "+s.time:"Time not set"}</p>`:""}<div style="margin-top:12px">${b}</div>
+ <h3 style="margin:20px 0 4px">What to do next</h3><p class="muted">${s.next}</p><div style="margin-top:8px">${ck}</div>
+ ${k==="Reach destination"?`<div class="row" style="margin-top:8px"><button class="btn sec" onclick="go('lastmile/${id}')">Compare last-mile options</button></div>`:""}
+ <div class="row" style="margin-top:16px">${c>0?`<button class="btn sec" onclick="jgo('${id}',${c-1})">Previous</button>`:""}<button class="btn" onclick="jnext('${id}')">${c<N-1?"Mark done & next":"Finish journey"}</button></div></section>`}
+function Journey(id){const t=getTrip(id),st=jsteps(t),j=jst(id);
+ if(!st.length)return`${Top(Back("trip/"+id,"← Trip"))}<h1>Journey steps</h1><div class="empty" style="margin-top:18px"><p>Add at least one leg to see your steps.</p><button class="btn" onclick="editTrip('${id}',2)">Add legs</button></div>`;
+ const c=Math.min(j.cur,st.length-1),N=st.length,dn=st.filter((_,i)=>j.done[i]).length;
+ return`${Top(Back("trip/"+id,"← Trip"))}<p class="eyebrow">${esc(t.from)} → ${esc(t.to)}</p><h1 style="margin:6px 0">Journey steps</h1><p class="muted">Tap a step to open it and mark steps done as you go. Nothing here is live.</p>
+ <div class="bar" role="progressbar" aria-valuenow="${dn}" aria-valuemax="${N}" aria-label="Steps completed"><i style="width:${dn/N*100}%"></i></div><small class="muted">${dn} of ${N} steps done</small>
+ <div class="jg" style="margin-top:16px"><div class="card" role="group" aria-label="All steps" style="align-self:start;padding:10px">${st.map((s,i)=>`<button class="sli" ${i===c?'aria-current="step"':""} onclick="jgo('${id}',${i})"><span class="dot ${j.done[i]?"done":""}">${j.done[i]?"✓":i+1}</span><span><b>${s.n}</b><br><small class="muted">${s.t}</small></span></button>`).join("")}</div>${StepDetail(t,st,c,j)}</div>`}
+
+// ----- last-mile -----
+const LMO={walk:{n:"Walk",b:0,p:0,m:12,w:0,max:2,c:1,g:"Short distances in daylight. No cost."},bus:{n:"Local bus",b:10,p:2,m:4,w:15,c:1,g:"Lowest cost. Routes and stops vary, so confirm locally."},sauto:{n:"Shared auto / e-rickshaw",b:10,p:6,m:5,w:10,c:1,g:"Short routes with several stops. Can be crowded with luggage."},auto:{n:"Auto-rickshaw",b:30,p:14,m:4,w:5,c:2,g:"Flexible and door-to-door. Agree the fare before you start."},cab:{n:"Taxi / app cab",b:60,p:16,m:3,w:8,c:3,g:"Most comfortable with luggage. Price and wait vary."}};
+const lmcalc=(o,km)=>{const r=x=>Math.max(0,Math.round(x/5)*5),c=o.b+o.p*km,t=o.w+o.m*km;return{lo:r(c*.8),hi:r(c*1.25),tl:Math.round(t*.8),th:Math.round(t*1.3),ok:!o.max||km<=o.max}};
+function lmset(k,v){LMS[k]=v;render()}
+function lmpick(id,k){const t=getTrip(id);t.lm=t.lm&&t.lm.opt===k&&t.lm.km===LMS.km?null:{opt:k,km:LMS.km};toast(t.lm?"Added to your plan":"Removed from your plan");render()}
+function LastMile(id){const t=getTrip(id),z=t.legs[t.legs.length-1],arr=z&&Tm(z.arr),hd=`${Top(Back("trip/"+id,"← Trip"))}<p class="eyebrow">Last mile · ${esc(t.to)}</p><h1 style="margin:6px 0 12px">Getting to your stay</h1>`;
+ if(!arr)return hd+`<div class="empty"><h3 style="color:var(--ink)">Add your arrival time to unlock last-mile options</h3><p>We use it to show choices that fit when you land.</p><button class="btn" onclick="editTrip('${id}',2)">Add arrival time</button></div>`;
+ const km=LMS.km,hr=+z.arr.slice(11,13),late=hr>=20||hr<5,chip=(vals,cur,fn,lab)=>vals.map(v=>`<button class="chip" aria-pressed="${v===cur}" onclick="lmset('${fn}',${typeof v==="number"?v:`'${v}'`})">${lab(v)}</button>`).join("");
+ const o=Object.entries(LMO).map(([k,v])=>({k,v,...lmcalc(v,km)})).sort((a,b)=>(b.ok-a.ok)||(LMS.sort==="cost"?a.lo-b.lo:LMS.sort==="time"?a.tl-b.tl:b.v.c-a.v.c));
+ return hd+`<div class="stack"><section class="card"><p>You arrive in <b>${esc(t.to)}</b> around <b>${arr}</b> ${badge("you")}</p>${late?`<p class="muted" style="margin-top:6px">Late arrival: some options may be limited at that hour. We can’t verify availability.</p>`:""}${t.stay?`<p class="muted" style="margin-top:6px">Stay: ${esc(t.stay)}</p>`:`<div class="banner" style="margin-top:10px"><span>Add your stay address for door-to-door planning.</span><div><button class="btn sec" onclick="editTrip('${id}',3)">Add stay address</button></div></div>`}
+ <p class="lbl" style="margin-top:16px">Distance to your stay ${badge("est")}</p><div class="chips" style="margin-top:8px" role="group" aria-label="Distance">${chip([2,5,10,20],km,"km",v=>v+" km")}</div><p class="muted" style="font-size:.85rem;margin-top:6px">Maps aren’t connected yet. Pick the closest estimate.</p>
+ <p class="lbl" style="margin-top:14px">Sort by</p><div class="chips" style="margin-top:8px" role="group" aria-label="Sort">${chip(["cost","time","comfort"],LMS.sort,"sort",v=>({cost:"Lowest cost",time:"Fastest",comfort:"Most comfortable"})[v])}</div></section>
+ <div class="grid2">${o.map(x=>{const ch=t.lm&&t.lm.opt===x.k&&t.lm.km===km,cost=x.hi===0?"Free":`₹${x.lo}–₹${x.hi}`;return`<article class="card" ${x.ok?"":'style="opacity:.65"'}><div class="row"><h3>${x.v.n}</h3>${ch?'<span class="badge b-live">✓ In your plan</span>':""}</div><dl><dt>Cost</dt><dd>${cost} ${badge("sample")}</dd><dt>Time</dt><dd>${x.tl}–${x.th} min ${badge("est")}</dd><dt>Availability</dt><dd><span class="badge b-na">– Not verified</span></dd><dt>Comfort</dt><dd><span aria-label="${x.v.c} of 3">${"●".repeat(x.v.c)+"○".repeat(3-x.v.c)}</span></dd></dl><p class="muted" style="margin:8px 0 12px">${x.v.g}</p>${x.ok?`<button class="btn ${ch?"sec":""}" onclick="lmpick('${id}','${x.k}')">${ch?"Remove from plan":"Add to my plan"}</button>`:'<p class="err">Not suitable at this distance.</p>'}</article>`}).join("")}</div>
+ <p class="muted" style="font-size:.88rem">Costs and times are sample estimates for planning only. Live availability, fares and maps aren’t connected. Confirm locally and agree fares before you start.</p></div>`}
+
+// ----- explore -----
+const PLC=["Roorkee","Delhi","Haridwar"],CATS=["All","Food","Cafe","Culture","Nature"],BUDG=["Any","₹","₹₹","₹₹₹"];
+const PLACES=[
+{id:"p1",city:"Roorkee",n:"Solani Aqueduct",cat:"Culture",bud:1,km:5,vm:60,d:"A historic canal aqueduct, popular for a short heritage visit.",tips:["Go in daylight","Carry water"]},
+{id:"p2",city:"Roorkee",n:"IIT Roorkee campus walk",cat:"Culture",bud:1,km:3,vm:90,d:"A green, historic campus. Visitor access can change, so check at the gate.",tips:["Carry photo ID","Ask about visitor rules"]},
+{id:"p3",city:"Roorkee",n:"Canal-side walk",cat:"Nature",bud:1,km:2,vm:45,d:"A calm stroll beside the canal, good for a break after travel.",tips:["Best in daylight","Wear comfortable shoes"]},
+{id:"p4",city:"Roorkee",n:"Chai and snacks stop (sample)",cat:"Food",bud:1,km:1,vm:30,d:"A placeholder for a casual local chai and snack stop.",tips:["Ask locals for favourites"]},
+{id:"p5",city:"Roorkee",n:"Work-friendly café (sample)",cat:"Cafe",bud:2,km:2,vm:60,d:"A placeholder for a quiet café where you can sit and recharge.",tips:["Check for charging points"]},
+{id:"p6",city:"Roorkee",n:"Family-style restaurant (sample)",cat:"Food",bud:2,km:3,vm:75,d:"A placeholder for a sit-down meal with regional dishes.",tips:["Ask about vegetarian options"]},
+{id:"p7",city:"Delhi",n:"Humayun’s Tomb",cat:"Culture",bud:2,km:8,vm:90,d:"A well-known Mughal-era garden tomb.",tips:["Check ticket rules on arrival","Go early"]},
+{id:"p8",city:"Delhi",n:"Lodhi Garden",cat:"Nature",bud:1,km:9,vm:60,d:"A large public garden for a relaxed walk.",tips:["Good for a morning walk"]},
+{id:"p9",city:"Delhi",n:"India Gate area",cat:"Culture",bud:1,km:7,vm:45,d:"A landmark memorial with open lawns around it.",tips:["Busy in the evening"]},
+{id:"p10",city:"Delhi",n:"Central café stop (sample)",cat:"Cafe",bud:3,km:4,vm:60,d:"A placeholder for a café in a central area.",tips:["Prices vary by outlet"]},
+{id:"p11",city:"Haridwar",n:"Har Ki Pauri",cat:"Culture",bud:1,km:2,vm:60,d:"A well-known riverside ghat, busy in the evenings.",tips:["Keep valuables secure in crowds"]},
+{id:"p12",city:"Haridwar",n:"Street food stop (sample)",cat:"Food",bud:1,km:2,vm:30,d:"A placeholder for a local snack stop.",tips:["Choose busy, clean stalls"]},
+{id:"p13",city:"Haridwar",n:"Riverside café (sample)",cat:"Cafe",bud:2,km:3,vm:60,d:"A placeholder for a relaxed café by the water.",tips:["Check timings locally"]}];
+const PL=id=>PLACES.find(p=>p.id===id);
+function xset(k,v){X[k]=v;render()}
+function tsave(id){const i=S.saved.indexOf(id);i<0?S.saved.push(id):S.saved.splice(i,1);toast(i<0?"Saved":"Removed from saved");render()}
+const PBadges=p=>`${badge("sample")}<span class="badge b-est">${p.cat}</span><span class="badge b-na">Budget ${BUDG[p.bud]} (sample)</span>`;
+function Explore(){const t=getTrip(S.active);if(!X.city)X.city=t&&PLC.includes(t.to)?t.to:"Roorkee";
+ const r=PLACES.filter(p=>p.city===X.city&&(X.cat==="All"||p.cat===X.cat)&&(!X.bud||p.bud<=X.bud)&&(!X.km||p.km<=X.km)).sort((a,b)=>X.sort==="near"?a.km-b.km:a.bud-b.bud||a.km-b.km);
+ const ch=(vals,cur,k,lab)=>vals.map(v=>`<button class="chip" aria-pressed="${v===cur}" onclick="xset('${k}',${typeof v==="number"?v:`'${v}'`})">${lab(v)}</button>`).join("");
+ return`${Top('<button class="ghost" onclick="go(\'freetime\')">Free-time planner</button>')}<h1>Explore nearby</h1><p class="muted" style="margin:6px 0 16px">Sample places for planning. No location permission needed: pick a city.</p>
+ <div class="stack"><section class="card"><p class="lbl">City</p><div class="chips" style="margin:8px 0 14px">${ch(PLC,X.city,"city",v=>v)}</div>${t&&!PLC.includes(t.to)?`<p class="muted" style="margin-bottom:12px">Sample places exist for ${PLC.join(", ")} only. ${esc(t.to)} isn’t covered yet.</p>`:""}
+ <p class="lbl">Category</p><div class="chips" style="margin:8px 0 14px">${ch(CATS,X.cat,"cat",v=>v)}</div><p class="lbl">Budget (up to)</p><div class="chips" style="margin:8px 0 14px">${ch([0,1,2,3],X.bud,"bud",v=>BUDG[v])}</div>
+ <p class="lbl">Distance</p><div class="chips" style="margin:8px 0 14px">${ch([0,2,5,10],X.km,"km",v=>v?"≤ "+v+" km":"Any")}</div><p class="lbl">Sort</p><div class="chips" style="margin-top:8px">${ch(["near","budget"],X.sort,"sort",v=>v==="near"?"Nearest":"Lowest budget")}</div></section>
+ <p role="status" aria-live="polite"><b>${r.length}</b> sample place${r.length===1?"":"s"} in ${X.city}</p>
+ ${r.length?`<div class="grid2">${r.map(p=>{const sv=S.saved.includes(p.id);return`<article class="card"><div class="row">${PBadges(p)}</div><h3 style="margin:10px 0 2px">${p.n}</h3><p class="muted">${p.d}</p><p style="margin-top:8px"><b>≈ ${p.km} km</b> from city centre <span class="badge b-est">≈ Estimated</span> · ~${p.vm} min visit</p><div class="row" style="margin-top:12px"><button class="btn" onclick="go('place/${p.id}')">Details</button><button class="btn sec" onclick="addPlace('${p.id}')">Add to itinerary</button><button class="chip" aria-pressed="${sv}" aria-label="${sv?"Remove from saved":"Save"}: ${p.n}" onclick="tsave('${p.id}')">${sv?"♥ Saved":"♡ Save"}</button></div></article>`}).join("")}</div>`:`<div class="empty"><h3 style="color:var(--ink)">No places match these filters</h3><p>Try a wider budget or distance.</p><button class="btn sec" onclick="X.cat='All';X.bud=0;X.km=0;render()">Reset filters</button></div>`}
+ <p class="muted" style="font-size:.88rem">Distances and budget bands are sample estimates. Opening hours, entry costs and accessibility aren’t available yet.</p></div>`}
+function Place(id){const p=PL(id),sv=S.saved.includes(id),t=getTrip(S.active);
+ return`${Top(Back("explore","← Explore"))}<div class="stack"><section class="card"><div class="row">${PBadges(p)}</div><h1 style="margin:10px 0 6px">${p.n}</h1><p>${p.d}</p>
+ <dl><dt>City</dt><dd>${p.city}</dd><dt>Distance</dt><dd>≈ ${p.km} km from city centre <span class="badge b-est">≈ Estimated</span></dd><dt>Time needed</dt><dd>~${p.vm} min <span class="badge b-est">≈ Estimated</span></dd><dt>Opening hours</dt><dd>${badge("na")}</dd><dt>Entry cost</dt><dd>${badge("na")}</dd><dt>Accessibility</dt><dd>${badge("na")}</dd></dl>
+ <div class="row" style="margin-top:16px"><button class="btn" onclick="addPlace('${p.id}')">Add to itinerary</button><button class="chip" aria-pressed="${sv}" onclick="tsave('${p.id}')">${sv?"♥ Saved":"♡ Save"}</button>${t?`<button class="btn sec" onclick="LMS.km=[2,5,10,20].find(x=>x>=${p.km})||20;go('lastmile/${t.id}')">Getting there</button>`:""}</div></section>
+ <section class="card"><h2>Good to know ${badge("sample")}</h2><ul class="ol">${p.tips.map(x=>`<li>${x}</li>`).join("")}<li>Check opening hours and any entry rules locally before you go.</li></ul></section></div>`}
+function addPlace(pid){const t=getTrip(S.active),p=PL(pid);
+ if(!t)return modal(`<h2>Create a trip first</h2><p class="muted">Places are added to a trip’s itinerary.</p><div class="row"><button class="btn" onclick="closeModal();newTrip()">Start a trip</button><button class="btn sec" onclick="closeModal()">Not now</button></div>`);
+ const ds=[],a=new Date(t.depart+"T00:00"),n=t.ret?Math.round((new Date(t.ret+"T00:00")-a)/864e5):0;for(let i=0;i<=Math.min(n,13);i++){const d=new Date(a);d.setDate(a.getDate()+i);ds.push(new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10))}
+ modal(`<h2>Add to itinerary</h2><p class="muted">${p.n} · ${esc(t.from)} → ${esc(t.to)}</p><div class="fld"><label for="xd">Day</label><select id="xd">${ds.map(d=>`<option value="${d}">${D(d)}</option>`).join("")}</select></div><div class="fld"><label for="xt">Time (optional)</label><input id="xt" type="time"></div><div class="row"><button class="btn" onclick="doAdd('${pid}')">Add</button><button class="btn sec" onclick="closeModal()">Cancel</button></div>`)}
+function doAdd(pid){const t=getTrip(S.active),d=document.getElementById("xd").value,tm=document.getElementById("xt").value;t.extra=t.extra||[];if(t.extra.some(x=>x.p===pid&&x.d===d)){toast("Already on that day");return}t.extra.push({p:pid,d,tm});closeModal();toast("Added to itinerary");render()}
+function rmExtra(tid,pid,d){const t=getTrip(tid);t.extra=t.extra.filter(x=>!(x.p===pid&&x.d===d));toast("Removed from itinerary");render()}
+const SavedSec=()=>`<section><div class="row" style="justify-content:space-between"><h2>Saved places</h2>${S.saved.length?'<button class="ghost" onclick="go(\'saved\')">See all</button>':""}</div>${S.saved.length?`<div class="stack" style="margin-top:12px;gap:12px">${S.saved.map(PL).filter(Boolean).map(p=>`<button class="card tc" onclick="go('place/${p.id}')"><b>${p.n}</b><span class="muted">${p.city} · ${p.cat} · ≈ ${p.km} km (sample)</span></button>`).join("")}</div>`:`<div class="empty" style="margin-top:12px"><p><b style="color:var(--ink)">Nothing saved yet</b><br>Places you save while exploring will appear here.</p><button class="btn sec" onclick="go('explore')">Explore nearby</button></div>`}</section>`;
+
+// ===== STAGE 7: RETURN PLAN + SIMULATED COMPANION (sample data only) =====
+const RP={edit:false,d:null,e:{}},CH={msgs:[],busy:false,pending:null},AI={consent:false};
+const tmin=s=>{const[h,m]=String(s||"0:0").split(":").map(Number);return h*60+m};
+const hm=m=>{m=((Math.round(m)%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")};
+function rpcalc(r,opt){const o=lmcalc(LMO[opt||r.pref],r.km),lv=tmin(r.target)-o.th-r.buf;return{o,tr:o.th,lv,prev:lv<0,rm:lv-(r.rem.on?r.rem.lead:0)}}
+const tripDays=t=>{const ds=[],a=new Date(t.depart+"T00:00"),n=t.ret?Math.round((new Date(t.ret+"T00:00")-a)/864e5):0;for(let i=0;i<=Math.min(n,13);i++){const d=new Date(a);d.setDate(a.getDate()+i);ds.push(new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10))}return ds};
+const RPDEF=t=>{const x=t.extra&&t.extra.length?PL(t.extra[t.extra.length-1].p):null,km=LMS.km;let pf=t.lm?t.lm.opt:"auto";if(pf==="walk"&&km>2)pf="auto";return{day:t.ret||t.depart,from:x?x.n:"",to:t.stay||"",target:"21:00",pref:pf,bk:pf==="cab"?"auto":"cab",km,buf:S.def.buf,notes:"",rem:{on:S.def.remind!==false,lead:S.def.lead,checkin:false},done:false,review:false,changed:null,na:[]}};
+const RPPrev=d=>{if(!d.target)return'<p class="muted">Choose a time to see your leave-by.</p>';const c=rpcalc(d);return`<p class="lbl">Leave by</p><p style="font:600 2rem Fraunces,Georgia,serif;line-height:1.2">${hm(c.lv)}${c.prev?' <small class="muted">(previous day)</small>':""} ${badge("est")}</p><p class="muted">Back by ${d.target} − ${c.tr} min travel (estimated) − ${d.buf} min buffer. Travel uses the upper end of the ${c.o.tl}–${c.o.th} min sample range.</p>`};
+function rpset(k,v){RP.d[k]=v;render()}
+function rpu(k,v){RP.d[k]=k==="buf"?+v:v;const p=document.getElementById("rpv");if(p)p.innerHTML=RPPrev(RP.d)}
+function rpnew(){const t=getTrip(S.active);RP.d=RPDEF(t);RP.e={};RP.edit=true;render()}
+function rpedit(){RP.d=clone(getTrip(S.active).rp);RP.e={};RP.edit=true;render()}
+function rpsave(){const t=getTrip(S.active),d=RP.d,e={};if(!d.target)e.target="Choose the time you want to be back.";if(!d.bk)e.bk="Choose a backup option.";else if(d.pref===d.bk)e.bk="Pick a backup that differs from your preferred option.";
+ ["pref","bk"].forEach(k=>{if(d[k]==="walk"&&d.km>2)e[k]="Walking isn’t suitable beyond 2 km. Choose another option."});RP.e=e;if(Object.keys(e).length){render();return}
+ const old=t.rp,ch=[];if(old){const a=rpcalc(old),b=rpcalc(d);if(a.lv!==b.lv)ch.push(`Leave-by moved from ${hm(a.lv)} to ${hm(b.lv)}.`);if(old.pref!==d.pref)ch.push(`Preferred option is now ${LMO[d.pref].n}.`);if(old.target!==d.target)ch.push(`Back-by time changed from ${old.target} to ${d.target}.`);if(old.day!==d.day)ch.push(`Day changed to ${D(d.day)}.`)}
+ t.rp={...clone(d),done:false,review:false,changed:ch.length?ch:null};RP.edit=false;toast(old?"Return plan updated":"Return plan saved");render()}
+function rpnext(){const r=getTrip(S.active).rp,a=rpcalc(r),old=r.pref;r.na=[...(r.na||[]),old];const nx=r.bk;r.pref=nx;r.bk=["cab","auto","sauto","bus","walk"].find(k=>!r.na.includes(k)&&k!==nx&&(k!=="walk"||r.km<=2))||"";
+ const b=rpcalc(r),m=[`${LMO[old].n} marked not available. ${LMO[nx].n} is now your preferred option.`];if(a.lv!==b.lv)m.push(`Leave-by moved from ${hm(a.lv)} to ${hm(b.lv)}.`);if(!r.bk)m.push("No backup left. Edit your plan to add one.");r.changed=m;toast("Preferred option updated");render()}
+function rrem(k,v){const r=getTrip(S.active).rp;r.rem[k]=k==="lead"?+v:v;render()}
+function rpback(){getTrip(S.active).rp.done=true;toast("Welcome back. Plan closed.");render()}
+function rpreopen(){getTrip(S.active).rp.done=false;render()}
+function rpdismiss(){const r=getTrip(S.active).rp;r.changed=null;r.review=false;render()}
+function rpremind(){const r=getTrip(S.active).rp;toast(`Preview: leave by ${hm(rpcalc(r).lv)}. Real reminders need the Android app.`)}
+function askDelRP(){modal(`<h2>Delete your return plan?</h2><p class="muted">Your leave-by and reminder settings will be removed. Your trip stays as it is.</p><div class="row"><button class="btn danger" onclick="delRP()">Delete plan</button><button class="btn sec" onclick="closeModal()">Keep plan</button></div>`)}
+function delRP(){delete getTrip(S.active).rp;closeModal();toast("Return plan deleted");render()}
+const sl=(id,label,v,fn,opts,blank,err)=>F(id,label,`<select id="${id}" ${err?'aria-invalid="true"':""} onchange="${fn}">${blank?`<option value="">${blank}</option>`:""}${Object.entries(opts).map(([k,l])=>`<option value="${k}" ${String(v)===k?"selected":""}>${l}</option>`).join("")}</select>`,err);
+function RPForm(t){const d=RP.d,e=RP.e,ed=!!t.rp,lo=Object.fromEntries(Object.entries(LMO).map(([k,v])=>[k,v.n]));
+ return`${Top(ed?`<button class="ghost" onclick="RP.edit=false;render()">Cancel</button>`:"")}<p class="eyebrow">${ed?"Edit plan":"New plan"} · ${esc(t.from)} → ${esc(t.to)}</p><h1 style="margin:6px 0 16px">My Return Plan</h1>
+ <div class="grid2"><section class="card"><p class="muted" style="margin-bottom:16px">Only the time is required. Everything else has a sensible default.</p>
+ ${sl("rd","Day",d.day,"RP.d.day=this.value",Object.fromEntries(tripDays(t).map(x=>[x,D(x)])))}
+ <div class="two">${F("rf","From (optional)",`<input id="rf" value="${esc(d.from)}" placeholder="Where you’ll be" oninput="RP.d.from=this.value">`)}${F("rto","Back to (optional)",`<input id="rto" value="${esc(d.to)}" placeholder="Your stay" oninput="RP.d.to=this.value">`)}</div>
+ ${F("rt","Be back by",`<input id="rt" type="time" value="${esc(d.target)}" ${e.target?'aria-invalid="true"':""} oninput="rpu('target',this.value)">`,e.target)}
+ <div class="two">${sl("rp1","Preferred transport",d.pref,"rpset('pref',this.value)",lo,"",e.pref)}${sl("rb","Backup option",d.bk,"rpset('bk',this.value)",lo,"Choose…",e.bk)}</div>
+ <p class="lbl">Distance back ${badge("est")}</p><div class="chips" style="margin:8px 0 16px" role="group" aria-label="Distance">${[2,5,10,20].map(v=>`<button class="chip" aria-pressed="${d.km===v}" onclick="rpset('km',${v})">${v} km</button>`).join("")}</div>
+ ${sl("rbuf","Time buffer",d.buf,"rpu('buf',this.value)",{15:"15 minutes",20:"20 minutes",30:"30 minutes (suggested)",45:"45 minutes",60:"60 minutes"})}
+ ${F("rn","Notes (optional)",`<input id="rn" value="${esc(d.notes)}" placeholder="e.g. meet a friend near the station" oninput="RP.d.notes=this.value">`)}
+ <div class="row"><button class="btn" onclick="rpsave()">${ed?"Save changes":"Save plan"}</button></div></section>
+ <div class="stack" style="align-content:start"><section class="card" aria-live="polite"><div id="rpv">${RPPrev(d)}</div></section><section class="card"><h3>How it works</h3><p class="muted" style="margin-top:6px">Leave-by = back-by time − travel time − buffer. Travel times are sample estimates, not live. A buffer gives you room if something runs late.</p></section></div></div>`}
+function RPView(t){const r=t.rp,c=rpcalc(r),b=r.bk?rpcalc(r,r.bk):null,rm=r.rem,cost=(k)=>{const o=lmcalc(LMO[k],r.km);return o.hi===0?"Free":`₹${o.lo}–₹${o.hi}`};
+ return`${Top(`<button class="ghost" onclick="rpedit()">Edit plan</button>`)}<p class="eyebrow">${esc(t.from)} → ${esc(t.to)}</p><h1 style="margin:6px 0 16px">My Return Plan</h1><div class="stack">
+ ${r.done?`<div class="banner" style="background:var(--ok-bg);color:var(--ok)" role="status"><b>Welcome back</b><span>Your plan is closed. Nothing was shared or sent.</span><div><button class="btn sec" onclick="rpreopen()">Reopen plan</button></div></div>`:""}
+ ${r.changed?`<div class="banner" role="status"><b>Changed</b><ul style="margin:0;padding-left:18px">${r.changed.map(x=>`<li>${x}</li>`).join("")}</ul><div><button class="btn sec" onclick="rpdismiss()">Got it</button></div></div>`:""}
+ ${r.review?`<div class="banner" role="status"><b>Needs review</b><span>Your trip route, dates or legs changed. Check that this plan still fits.</span><div><button class="btn sec" onclick="rpdismiss()">Mark as reviewed</button></div></div>`:""}
+ <section class="card"><div class="row">${badge("est")}<span class="badge ${r.done?"b-live":"b-est"}">${r.done?"✓ Closed":"Active"}</span></div><p class="lbl" style="margin-top:10px">Leave by</p><p style="font:600 clamp(2.2rem,9vw,3rem) Fraunces,Georgia,serif;line-height:1.1">${hm(c.lv)}${c.prev?' <small class="muted">(previous day)</small>':""}</p><p>to be back by <b>${r.target}</b> on ${D(r.day)}</p>
+ <p class="muted" style="margin-top:6px">${r.from?esc(r.from):"Where you are"} → ${r.to?esc(r.to):"your stay"} · ${LMO[r.pref].n} · about ${r.km} km (sample estimate)</p>
+ <dl><dt>Back by</dt><dd>${r.target}</dd><dt>Travel</dt><dd>${c.tr} min ${badge("est")} <span class="muted">(range ${c.o.tl}–${c.o.th})</span></dd><dt>Buffer</dt><dd>${r.buf} min</dd><dt>Leave-by</dt><dd><b>${hm(c.lv)}</b></dd><dt>Cost</dt><dd>${cost(r.pref)} ${badge("sample")}</dd><dt>Availability</dt><dd><span class="badge b-na">– Not verified</span></dd></dl>
+ ${r.notes?`<p class="muted" style="margin-top:10px">Note: ${esc(r.notes)}</p>`:""}
+ <div class="row" style="margin-top:16px">${r.done?"":`<button class="btn" onclick="rpback()">I’m back</button>`}<button class="btn sec" onclick="askDelRP()">Delete plan</button></div></section>
+ <div class="grid2"><section class="card"><h2>Backup option</h2>${b?`<p style="margin-top:6px">If ${LMO[r.pref].n} isn’t available: <b>${LMO[r.bk].n}</b></p><dl><dt>Leave-by</dt><dd><b>${hm(b.lv)}</b> ${badge("est")}</dd><dt>Travel</dt><dd>${b.tr} min ${badge("est")}</dd><dt>Cost</dt><dd>${cost(r.bk)} ${badge("sample")}</dd></dl><div style="margin-top:12px"><button class="btn sec" onclick="rpnext()">${LMO[r.pref].n} isn’t available</button></div>`:`<p class="muted" style="margin-top:6px">No backup set. Edit your plan to add one.</p>`}${(r.na||[]).length?`<p class="muted" style="margin-top:10px">Marked not available: ${r.na.map(k=>LMO[k].n).join(", ")}</p>`:""}</section>
+ <section class="card"><h2>Reminders</h2><label class="chk" style="cursor:pointer"><input type="checkbox" ${rm.on?"checked":""} onchange="rrem('on',this.checked)" style="width:22px;height:22px;accent-color:var(--teal)"><span>Remind me before I need to leave</span></label>
+ ${rm.on?`<div class="fld" style="margin-top:8px"><label for="rl">Remind me</label><select id="rl" onchange="rrem('lead',this.value)">${[10,20,30,45,60].map(v=>`<option value="${v}" ${rm.lead===v?"selected":""}>${v} minutes before leave-by</option>`).join("")}</select></div><p>Reminder at <b>${hm(c.rm)}</b></p>`:`<p class="muted">Reminders are off.</p>`}
+ <label class="chk" style="cursor:pointer"><input type="checkbox" ${rm.checkin?"checked":""} onchange="rrem('checkin',this.checked)" style="width:22px;height:22px;accent-color:var(--teal)"><span>Ask me to confirm I’m back by ${r.target}</span></label>
+ <p class="muted" style="font-size:.86rem;margin:6px 0 10px">Prototype: these settings are saved, but no notifications are delivered yet. Reminders only ever go to you.</p><button class="chip" onclick="rpremind()">Preview reminder</button></section></div>
+ <p class="muted" style="font-size:.88rem">The Return Plan is preparation support. It doesn’t track you, alert anyone or promise safety. Costs and times are sample estimates.</p></div>`}
+function Return(){const t=getTrip(S.active);
+ if(!t)return`${Top()}<h1>My Return Plan</h1><div class="empty" style="margin-top:18px"><p>Create a trip first, then plan how you’ll get back.</p><div class="row" style="justify-content:center"><button class="btn" onclick="newTrip()">Start a trip</button><button class="btn sec" onclick="trySample()">Try sample trip</button></div></div>`;
+ if(RP.edit)return RPForm(t);
+ if(!t.rp)return`${Top()}<p class="eyebrow">${esc(t.from)} → ${esc(t.to)}</p><h1 style="margin:6px 0 16px">My Return Plan</h1><div class="empty"><h3 style="color:var(--ink)">No return plan yet</h3><p>Set when you want to be back, how you’ll travel and a backup. We work out when to leave.</p><button class="btn" onclick="rpnew()">Create return plan</button></div>`;
+ return RPView(t)}
+
+// ----- simulated companion (rule-based; no AI, no live data) -----
+const CQ=["What should I sort out first?","Explain my journey stages","Is my transfer tight?","Suggest alternatives","Help me plan a free evening","Explain my return plan","Is this trip safe?"];
+const PM={"Quiet places":["Nature","Cafe"],"Local food":["Food"],"Culture & history":["Culture"],"Nature":["Nature"]};
+const qa=p=>{CH.pending=p;go("companion")};
+const jtr=t=>jsteps(t).findIndex(s=>s.k==="Transfer");
+function aCaps(t){return{h:"I’m a <b>simulated</b> assistant that follows simple rules on the details you’ve entered. I can:<ul class=\"ol\"><li>explain your journey stages</li><li>check your transfer time buffers</li><li>suggest fallbacks and last-mile alternatives (sample estimates)</li><li>help plan free time with sample places</li><li>explain your return plan</li></ul>I can’t see live schedules, fares, weather or availability.",src:["How I work"],act:t?[["Plan free time","ask('Help me plan a free evening')"]]:null}}
+const aSafe=()=>({h:"I can’t promise or score safety. No app can, and I have no live information about places or conditions. Firstmile is for travel confidence and preparation, not an emergency service.<br><br>What I can do: check your time buffers, set a return plan with a leave-by time and a backup, and tell you plainly when something is estimated or unavailable. If you ever feel unsafe, contact local emergency services (112 in India) or someone you trust.",src:["Firstmile principles"],act:[["Open My Return Plan","go('return')"]]});
+const aLive=()=>({h:"I can’t see live information. This is a simulated assistant with no connected data or APIs, so I don’t know current schedules, platforms, service numbers, fares, weather, opening hours or availability.<br><br>What I can do: use the times <i>you</i> entered, label every estimate, and point you to the operator’s official website, app or helpline for anything live.",src:["No live data"],act:null});
+const aGate=()=>({h:"To answer questions about your trip I need your OK to read its details (legs, times, preferences, saved places and return plan). They stay on this page. Nothing is sent anywhere.",src:["Consent needed"],act:[["Allow trip details","AI.consent=true;render()"]]});
+const aNoTrip=()=>({h:"I don’t have a trip to look at yet. Create one, or try the sample trip, and I can answer based on it.",src:["No trip yet"],act:[["Start a trip","newTrip()"],["Try sample trip","trySample()"]]});
+function aStages(t){const st=stages(t);if(!st.length)return{h:"Add at least one leg and I can walk you through the stages.",src:["Your trip legs"],act:[["Add legs",`editTrip('${t.id}',2)`]]};
+ return{h:`Your trip has ${st.length} stages:<ol class="ol">${st.map(s=>`<li><b>${s.n}</b>: ${s.t}. <span class="muted">${s.next}</span></li>`).join("")}</ol>Transfers are where time buffers matter most.`,src:["Your trip legs","Journey stage guide (general)"],act:[["Open journey steps",`go('journey/${t.id}')`]]}}
+function aFirst(t){const c=complete(t).filter(x=>!x.ok).slice(0,3);
+ return c.length?{h:`Here’s what I’d sort out first:<ol class="ol">${c.map(x=>`<li>${x.t}</li>`).join("")}</ol>Each one makes your plan more reliable.`,src:["Your trip checklist"],act:[["Open trip",`go('trip/${t.id}')`]]}:{h:"Your checklist is complete. Next, open your journey steps and tick things off as you travel.",src:["Your trip checklist"],act:[["Open journey steps",`go('journey/${t.id}')`]]}}
+function aTransfer(t){const L=t.legs;if(L.length<2)return{h:"Your trip has one leg, so there’s no transfer to check. Add another leg if you change vehicles.",src:["Your trip legs"],act:[["Edit legs",`editTrip('${t.id}',2)`]]};
+ const W={ok:"Comfortable by the sample guideline (60 minutes or more).",tight:"Tight (under 60 minutes). Head straight to your next departure point.",risk:"At risk (under 30 minutes). Check official updates now and consider the fallback options."};
+ const rows=L.slice(0,-1).map((l,i)=>{const b=buf(l,L[i+1]);return`<li><b>${esc(l.to)}</b>: ${b?`${dur(b.m)} between arriving and your next departure. ${W[b.c]}`:"I need arrival and departure times to work out the buffer."}</li>`});
+ return{h:`Here’s your time buffer${rows.length>1?"s":""}:<ul class="ol">${rows.join("")}</ul><small class="muted">The 60 and 30 minute thresholds are sample guidelines, not verified for your station.</small>`,src:["Your trip legs","Buffer guideline (sample)"],act:[["Open transfer step",`jst('${t.id}').cur=${jtr(t)};go('journey/${t.id}')`]]}}
+function aAlt(t){const L=t.legs,z=L[L.length-1];let h="";const act=[];
+ const bs=L.slice(0,-1).map((l,i)=>buf(l,L[i+1])),risky=bs.find(b=>b&&b.c!=="ok");
+ if(risky)h+=`Your transfer buffer is ${risky.c==="tight"?"tight":"at risk"} (${dur(risky.m)}). Fallbacks to consider:<ul class="ol">${FB.slice(0,4).map(f=>`<li><b>${f[0]}</b>: ${f[1]}</li>`).join("")}</ul>`;
+ else if(bs.length&&bs.every(Boolean))h+="Your transfer buffers look comfortable, so you don’t need a fallback right now. ";
+ if(z&&z.arr&&z.arr.length>10){const o=Object.entries(LMO).map(([k,v])=>({k,v,...lmcalc(v,LMS.km)})).filter(x=>x.ok).sort((a,b)=>a.lo-b.lo).slice(0,3);h+=`<p style="margin-top:8px">For the last mile (about ${LMS.km} km, sample estimate):</p><ul class="ol">${o.map(x=>`<li><b>${x.v.n}</b>: ${x.hi===0?"Free":`₹${x.lo}–₹${x.hi}`} (sample), ${x.tl}–${x.th} min (estimated). Availability not verified.</li>`).join("")}</ul>`;act.push(["Compare last-mile options",`go('lastmile/${t.id}')`])}
+ if(!h)h="I need your legs and arrival time to suggest alternatives. Add them and ask again.";
+ return{h,src:["Your trip legs","Sample last-mile estimates"],act:act.length?act:[["Edit legs",`editTrip('${t.id}',2)`]]}}
+function aReturn(t){const r=t.rp;if(!r)return{h:"You haven’t made a return plan yet. Set when you want to be back and I’ll work out your leave-by time and a backup.",src:["Your return plan"],act:[["Create return plan","rpnew();go('return')"]]};
+ const c=rpcalc(r),b=r.bk?rpcalc(r,r.bk):null;
+ return{h:`You want to be back by <b>${r.target}</b> on ${D(r.day)}. Using ${LMO[r.pref].n} (about ${r.km} km, estimated ${c.tr} min) and a ${r.buf} min buffer, you should <b>leave by ${hm(c.lv)}</b>.${b?` If it isn’t available, ${LMO[r.bk].n} means leaving by ${hm(b.lv)}.`:""}${r.rem.on?` Your reminder is set for ${hm(c.rm)}.`:""}<br><small class="muted">Travel times are sample estimates, not live.</small>`,src:["Your return plan","Sample last-mile estimates"],act:[["Open return plan","go('return')"]]}}
+function aFree(t){const L=t.legs,z=L[L.length-1];if(!z||!z.arr||z.arr.length<=10)return{h:"I need your final arrival time to find free time. Add it to your legs and ask again.",src:["Your trip legs"],act:[["Add arrival time",`editTrip('${t.id}',2)`]]};
+ const day=z.arr.slice(0,10),st=tmin(z.arr.slice(11,16))+60;let en=1200,en_=t.rp&&t.rp.day===day?(en=rpcalc(t.rp).lv,"your return leave-by"):"20:00 (my default, add a return plan to change it)";
+ const w=en-st,tx=`You arrive around ${z.arr.slice(11,16)}. Allowing about an hour to settle in (my estimate), your free window on ${D(day)} runs from ${hm(st)} to ${hm(en)}, about ${Math.max(0,Math.floor(w/60))}h ${Math.max(0,w%60)}m. It ends at ${typeof en_==="string"?en_:""}.`;
+ if(w<45)return{h:tx+" That’s under 45 minutes, so I’d keep it simple: rest, eat nearby and get your bearings.",src:["Your trip legs","Your return plan"],act:null};
+ if(!PLC.includes(t.to))return{h:tx+` I only have sample places for ${PLC.join(", ")}, so I can’t suggest places in ${esc(t.to)} yet.`,src:["Your trip legs"],act:null};
+ const want=new Set(t.prefs.flatMap(p=>PM[p]||[])),mb={Budget:1,"Mid-range":2,Comfort:3}[t.budget]||3;
+ const pool=PLACES.filter(p=>p.city===t.to&&p.bud<=mb).sort((a,b)=>(want.has(a.cat)?0:1)-(want.has(b.cat)?0:1)||a.km-b.km);let used=0;const pick=[];
+ for(const p of pool){if(pick.length<3&&used+p.vm+20<=w){pick.push(p);used+=p.vm+20}}
+ if(!pick.length)return{h:tx+" None of my sample places fit that window, so rest and explore on foot nearby.",src:["Your trip legs","Sample places"],act:null};
+ return{h:`${tx}<br>Here’s a plan that fits${want.size?" and leans towards your preferences":""}:<ol class="ol">${pick.map(p=>`<li><b>${p.n}</b> (${p.cat}), ~${p.vm} min, ≈${p.km} km <span class="muted">(sample)</span></li>`).join("")}</ol><small class="muted">Visit times include about 20 min of travel each, estimated. I can’t check opening hours. Nothing is added until you confirm.</small>`,src:["Your trip legs","Your preferences","Sample places"],act:[["Open free-time planner","go('freetime')"],...pick.map(p=>["Add "+p.n.split(" (")[0],`addPlace('${p.id}')`])]}}
+function reply(q){const t=getTrip(S.active),s=q.toLowerCase(),has=(...w)=>w.some(x=>s.includes(x));
+ const lm=has("cab","taxi","auto","rickshaw","bus","last mile","last-mile","my stay","alternative","backup","instead","option");
+ if(has("safe","danger","secure","guarantee","protect"))return aSafe();
+ if(has("what can you","help me with")||/^(hi|hello|hey|help)\b/.test(s))return aCaps(t);
+ if(!lm&&has("live","real-time","real time","right now","platform","train number","pnr","flight status","weather","open now","schedule","availability","fare","price","timetable"))return aLive();
+ if(!AI.consent)return aGate();if(!t)return aNoTrip();
+ if(has("free time","free evening","free afternoon","spare","things to do","what to do","explore","visit","evening","afternoon","plan my"))return aFree(t);
+ if(has("return","leave by","leave-by","getting back","go back","way back","back to"))return aReturn(t);
+ if(lm)return aAlt(t);
+ if(has("transfer","change","connection","buffer","delay","tight","miss"))return aTransfer(t);
+ if(has("stage","explain","step","journey"))return aStages(t);
+ if(has("first","next","sort","prepare","ready","checklist","start"))return aFirst(t);
+ return{h:"I’m not sure about that one. I work best with questions about your journey stages, transfers, alternatives, free time and return plan. Try one of the suggestions below.",src:["How I work"],act:[["What can you do?","ask('What can you do?')"]]}}
+function ask(q){q=(q||"").trim();if(!q||CH.busy)return;CH.msgs.push({r:"u",h:q});CH.busy=true;chatUpdate();setTimeout(()=>{CH.msgs.push({r:"b",...reply(q)});CH.busy=false;chatUpdate()},550)}
+function sendQ(ev){ev&&ev.preventDefault&&ev.preventDefault();const i=document.getElementById("q"),v=i.value;i.value="";ask(v);return false}
+function fbk(i,v){CH.msgs[i].fb=v;chatUpdate()}
+function fbr(i,r){CH.msgs[i].why=r;toast("Thanks. Feedback is kept on this page only.");chatUpdate()}
+const fbRow=(m,i)=>`<div class="row" style="margin-top:12px"><small class="muted">Was this helpful?</small><button class="chip" aria-pressed="${m.fb==="up"}" onclick="fbk(${i},'up')">Helpful</button><button class="chip" aria-pressed="${m.fb==="down"}" onclick="fbk(${i},'down')">Not helpful</button></div>${m.fb==="down"&&!m.why?`<div class="row" style="margin-top:8px"><small class="muted">What went wrong?</small>${["Wrong","Unclear","Not what I asked"].map(r=>`<button class="chip" onclick="fbr(${i},'${r}')">${r}</button>`).join("")}</div>`:""}${m.why?`<small class="muted" style="display:block;margin-top:6px">Reason noted: ${m.why}</small>`:""}`;
+const Bubble=(m,i)=>m.r==="u"?`<div class="msg u"><div class="bub">${esc(m.h)}</div></div>`:`<div class="msg b"><div class="bub"><span class="badge b-sample">◌ Simulated</span><div style="margin-top:8px">${m.h}</div>${m.plain?"":`<div class="chips" style="margin-top:10px">${(m.src||[]).map(x=>`<span class="badge b-est">${x}</span>`).join("")}</div><small class="muted" style="display:block;margin-top:6px">Freshness: built from details on this page. No live data.</small>`}${m.act?`<div class="row" style="margin-top:10px">${m.act.map(a=>`<button class="chip" onclick="${a[1]}">${a[0]}</button>`).join("")}</div>`:""}${m.plain?"":fbRow(m,i)}</div></div>`;
+const Chat=()=>CH.msgs.map(Bubble).join("")+(CH.busy?'<div class="msg b"><div class="bub muted">Thinking… (simulated)</div></div>':"");
+function chatUpdate(){const c=document.getElementById("chat");if(!c)return;c.innerHTML=Chat();c.lastElementChild?.scrollIntoView?.({block:"nearest"})}
+function Companion(){const t=getTrip(S.active);if(!CH.msgs.length)CH.msgs.push({r:"b",plain:1,h:"Hi! I’m a <b>simulated</b> assistant. I can explain your journey stages, check transfer buffers, suggest alternatives and help plan free time, using only the details you’ve entered here."});
+ if(CH.pending){const p=CH.pending;CH.pending=null;setTimeout(()=>ask(p),50)}
+ return`${Top()}<h1>Companion</h1><div class="stack" style="margin-top:14px"><div class="banner" role="note"><b>◌ Simulated assistant</b><span>This isn’t a live AI. It follows simple rules on the details you’ve entered. It has no connected data, maps or APIs, and can’t see live schedules, fares, weather or availability.</span></div>
+ <section class="card">${AI.consent?`<h3>What the Companion can see</h3><p class="muted" style="margin-top:6px">${t?`${esc(t.from)} → ${esc(t.to)} · ${t.legs.length} leg${t.legs.length>1?"s":""} · preferences: ${t.prefs.length?t.prefs.map(esc).join(", "):"none"} · ${S.saved.length} saved place${S.saved.length===1?"":"s"} · return plan: ${t.rp?"set":"not set"}`:"No trip yet."}</p><div style="margin-top:10px"><button class="chip" onclick="AI.consent=false;render()">Stop sharing trip details</button></div>`:`<h3>Use your trip details?</h3><p class="muted" style="margin:6px 0 12px">Allow the Companion to read your trip’s legs, times, preferences, saved places and return plan. They stay on this page and nothing is sent anywhere.</p><div class="row"><button class="btn" onclick="AI.consent=true;render()">Allow trip details</button></div>`}</section>
+ <section class="card"><div class="chips" role="group" aria-label="Suggested questions">${CQ.map(p=>`<button class="chip" onclick="ask('${p}')">${p}</button>`).join("")}</div>
+ <div id="chat" role="log" aria-live="polite" aria-label="Conversation" style="display:grid;gap:12px;margin:16px 0">${Chat()}</div>
+ <form onsubmit="return sendQ(event)" class="row" style="flex-wrap:nowrap"><label for="q" class="sr">Ask the Companion</label><input id="q" autocomplete="off" placeholder="Ask about your trip…" style="flex:1;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;min-height:48px;min-width:0"><button class="btn" type="submit">Send</button></form>
+ <div style="margin-top:12px"><button class="chip" onclick="CH.msgs=[];render()">Clear conversation</button></div></section></div>`}
+
+// ===== STAGE 8: SETTINGS, DATA TRANSPARENCY, SAVED =====
+S.set={theme:"system",size:"normal"};S.def={prefs:[],buf:30,lead:20};
+function applySet(){const r=document.documentElement,s=S.set;if(!r)return;s.theme==="system"?r.removeAttribute("data-theme"):r.setAttribute("data-theme",s.theme);r.style.fontSize=s.size==="large"?"118%":""}
+function sset(k,v){S.set[k]=v;applySet();render()}
+function dset(k,v){S.def[k]=+v;render()}
+function dpref(el,p){const a=S.def.prefs,i=a.indexOf(p);i<0?a.push(p):a.splice(i,1);el.setAttribute("aria-pressed",i<0)}
+function setName(v){DATA.user.name=v.trim()||"Traveller"}
+function showData(){const j=JSON.stringify({profile:{name:DATA.user.name},settings:S.set,defaults:S.def,trips:S.trips,savedPlaces:S.saved,account:S.user,companion:{trip_details_allowed:AI.consent,messages:CH.msgs.length}},null,2);
+ modal(`<h2>Your data</h2><p class="muted">Everything Firstmile holds is shown here. It lives in this page’s memory only.</p><textarea readonly aria-label="Your data as text" style="width:100%;height:220px;font:12px/1.4 ui-monospace,Menlo,monospace;background:var(--bg);color:var(--ink);border:1.5px solid var(--line);border-radius:12px;padding:10px">${esc(j)}</textarea><div class="row"><button class="btn" id="cp">Copy</button><button class="btn sec" onclick="closeModal()">Close</button></div>`);
+ const b=document.getElementById("cp");if(b)b.onclick=async()=>{try{await navigator.clipboard.writeText(j);toast("Copied to clipboard")}catch(e){const t=document.querySelector(".modal textarea");t?.select?.();toast("Select the text and copy it manually")}}}
+function askWipe(){modal(`<h2>Delete all my data?</h2><p class="muted">This removes your trips, return plans, saved places, chat and settings from this page. It can’t be undone.</p><div class="row"><button class="btn danger" onclick="wipe()">Delete everything</button><button class="btn sec" onclick="closeModal()">Keep my data</button></div>`)}
+function wipe(){S.trips=[];S.active=undefined;S.saved=[];Object.keys(J).forEach(k=>delete J[k]);CH.msgs=[];AI.consent=false;W=null;RP.edit=false;S.set={theme:"system",size:"normal"};S.def={prefs:[],buf:30,lead:20};DATA.user.name="Traveller";applySet();closeModal();toast("All data deleted");go("home");render()}
+function clearSaved(){S.saved=[];toast("Saved places cleared");render()}
+const CONN=[["Railway timetables and status"],["Flight status"],["Maps and routing"],["Local transport availability and fares"],["Weather"],["Place details and opening hours"],["AI model","The Companion is a simulated, rule-based assistant"]];
+const INV=[["Trips and legs","Route, dates, times and stay address you enter","Itinerary, journey steps, time buffers"],["Preferences","Interests, budget band and accessibility needs you choose","Place and free-time suggestions"],["Saved places","Places you tap Save on","Your saved list and itinerary"],["Return plan","Back-by time, transport, backup and reminders","Leave-by calculations"],["Companion chat","Questions you ask and feedback you give","Showing the conversation here"],["Account (demo)","Sign-in method and the last 4 digits of a phone number, if you use the demo sign-in","Showing you’re signed in. No real account exists"]];
+const LEG=[["live","Comes from an official source with a timestamp. Nothing in this prototype is live."],["est","A calculated or approximate value, such as a time buffer or travel time."],["sample","Placeholder data for demonstration."],["na","We don’t have it, so we say so instead of guessing."],["you","Typed in by you."]];
+const seg=(vals,cur,k,lab)=>vals.map(v=>`<button class="chip" aria-pressed="${v===cur}" onclick="sset('${k}','${v}')">${lab[v]}</button>`).join("");
+function Settings(){const s=S.set,d=S.def;
+ return`${Top(Back("home"))}<h1>Settings</h1><p class="muted" style="margin:6px 0 20px">Control how Firstmile looks, what it assumes, and what it knows about you.</p><div class="stack">
+ ${AccountSec()}<div class="grid2"><section class="card"><h2>You and appearance</h2>
+ ${F("nm","Display name",`<input id="nm" value="${esc(DATA.user.name==="Traveller"?"":DATA.user.name)}" placeholder="Traveller" autocomplete="given-name" oninput="setName(this.value)">`)}
+ <p class="lbl" id="th">Theme</p><div class="chips" role="group" aria-labelledby="th" style="margin:8px 0 16px">${seg(["system","light","dark"],s.theme,"theme",{system:"Match device",light:"Light",dark:"Dark"})}</div>
+ <p class="lbl" id="ts">Text size</p><div class="chips" role="group" aria-labelledby="ts" style="margin-top:8px">${seg(["normal","large"],s.size,"size",{normal:"Normal",large:"Large"})}</div></section>
+ <section class="card"><h2>Travel defaults</h2><p class="muted" style="margin:4px 0 14px">Used when you start a new trip or return plan.</p>
+ <p class="lbl" id="dp">Preferences</p><div class="chips" role="group" aria-labelledby="dp" style="margin:8px 0 16px">${PREFS.map(p=>`<button type="button" class="chip" aria-pressed="${d.prefs.includes(p)}" onclick="dpref(this,'${p}')">${p}</button>`).join("")}</div>
+ ${F("db","Return time buffer",`<select id="db" onchange="dset('buf',this.value)">${[15,20,30,45,60].map(v=>`<option value="${v}" ${d.buf===v?"selected":""}>${v} minutes</option>`).join("")}</select>`)}
+ ${F("dl2","Reminder lead time",`<select id="dl2" onchange="dset('lead',this.value)">${[10,20,30,45,60].map(v=>`<option value="${v}" ${d.lead===v?"selected":""}>${v} minutes before leave-by</option>`).join("")}</select>`)}
+ <label class="chk" style="cursor:pointer"><input type="checkbox" ${d.remind?"checked":""} onchange="S.def.remind=this.checked;render()" style="width:22px;height:22px;accent-color:var(--teal)"><span>Turn on reminders by default</span></label></section></div>
+ <section class="card"><h2>Privacy and consent</h2><label class="chk" style="cursor:pointer"><input type="checkbox" ${AI.consent?"checked":""} onchange="AI.consent=this.checked;render()" style="width:22px;height:22px;accent-color:var(--teal)"><span><b>Let the Companion read my trip details</b><br><span class="muted">Legs, times, preferences, saved places and return plan. Off by default. You can change this any time.</span></span></label>
+ <p class="muted" style="margin-top:10px">Firstmile never sells your data, shows ads, tracks your live location or alerts anyone automatically.</p></section>
+ <section class="card"><h2>Data transparency</h2><p class="muted" style="margin:4px 0 12px">Where your data lives: <b style="color:var(--ink)">in this page’s memory only.</b> There is no account, server or sign-in in this prototype, and it clears when you refresh.</p>
+ <h3>What we hold and why</h3><div style="margin:8px 0 18px">${INV.map(r=>`<div class="chk" style="display:block;border-top:1px solid var(--line)"><b>${r[0]}</b><br><span class="muted">${r[1]}. Used for: ${r[2]}.</span></div>`).join("")}</div>
+ <h3>What isn’t connected</h3><p class="muted" style="margin:4px 0 8px">So nothing here can be live. We show estimates and samples, clearly labelled.</p><div style="margin-bottom:18px">${CONN.map(r=>`<div class="chk" style="border-top:1px solid var(--line);justify-content:space-between;align-items:center"><span>${r[0]}${r[1]?`<br><small class="muted">${r[1]}</small>`:""}</span><span class="badge b-na">– Not connected</span></div>`).join("")}</div>
+ <h3>What the labels mean</h3><div style="margin-top:8px">${LEG.map(r=>`<div class="chk" style="border-top:1px solid var(--line);align-items:center"><span style="flex:none;min-width:150px">${badge(r[0])}</span><span class="muted">${r[1]}</span></div>`).join("")}</div></section>
+ <section class="card"><h2>Manage your data</h2><div class="row" style="margin-top:12px"><button class="btn sec" onclick="showData()">See my data</button><button class="btn sec" onclick="go('saved')">Saved places</button><button class="btn sec" onclick="trySample()">Restore sample trip</button><button class="btn sec" onclick="clearSaved()">Clear saved places</button><button class="btn danger" onclick="askWipe()">Delete all my data</button></div></section>
+ <section class="card"><h2>About</h2><p class="muted" style="margin-top:6px">Firstmile prototype · sample data only. It’s travel-preparation support, not a safety service or an emergency service. In an emergency in India, call 112.</p><div class="row" style="margin-top:12px"><button class="chip" onclick="go('design')">Design system</button></div></section></div>`}
+function Saved(){const ps=S.saved.map(PL).filter(Boolean);
+ return`${Top(Back("home"))}<h1>Saved</h1><p class="muted" style="margin:6px 0 20px">Your saved places and trips.</p><div class="stack"><section><h2>Places</h2>${ps.length?`<div class="grid2" style="margin-top:12px">${ps.map(p=>`<article class="card"><div class="row">${PBadges(p)}</div><h3 style="margin:10px 0 2px">${p.n}</h3><p class="muted">${p.city} · ≈ ${p.km} km (sample estimate)</p><div class="row" style="margin-top:12px"><button class="btn" onclick="go('place/${p.id}')">Details</button><button class="btn sec" onclick="addPlace('${p.id}')">Add to itinerary</button><button class="chip" aria-label="Remove ${p.n} from saved" onclick="tsave('${p.id}')">♥ Remove</button></div></article>`).join("")}</div>`:`<div class="empty" style="margin-top:12px"><p><b style="color:var(--ink)">No saved places yet</b><br>Tap Save on a place in Explore.</p><button class="btn" onclick="go('explore')">Explore nearby</button></div>`}</section>
+ <section><h2>Trips</h2>${S.trips.length?`<div class="stack" style="margin-top:12px;gap:12px">${S.trips.map(t=>`<button class="card tc" onclick="go('trip/${t.id}')"><b>${esc(t.from)} → ${esc(t.to)}</b><span class="muted">${Dates(t)} · ${t.legs.length} leg${t.legs.length>1?"s":""}${t.sample?" · sample":""}</span></button>`).join("")}</div>`:`<div class="empty" style="margin-top:12px"><p>No trips yet.</p><button class="btn" onclick="newTrip()">Start a trip</button></div>`}</section></div>`}
+
+// ===== ONBOARDING, DEMO SIGN-IN, SETUP (no real accounts) =====
+S.ob={seen:false};S.user=null;S.guest=false;S.def.budget="";S.def.remind=true;
+const PRE=["welcome","signin","setup"],OB={step:0,mode:"in",stage:"phone",phone:"",name:"",err:"",setup:0};
+const SL=[{h:"Travel solo with confidence",p:"Firstmile turns a journey into clear next steps and honest options, from the first mile to the last."},{h:"Know every step",p:"See each stage of your trip, check time buffers at transfers and know what to do if something runs late.",x:["Depart","Travel","Transfer","Arrive"]},{h:"Honest about what we know",p:"Every detail is labelled as live, estimated, sample or unavailable. We never guess. Built for every solo traveller.",x:"labels"}];
+function obgo(i){OB.step=i;render()}
+function guest(){S.ob.seen=true;S.guest=true;if(!getTrip("t-sample"))S.trips.unshift(sampleTrip());S.active="t-sample";toast("Exploring the sample trip as a guest");go("trip/t-sample");render()}
+function Welcome(){const i=OB.step,s=SL[i],last=i===2;
+ const x=s.x==="labels"?`<div class="chips" style="margin-top:16px">${["live","est","sample","na"].map(badge).join("")}</div>`:s.x?`<div class="chips" style="margin-top:16px">${s.x.map((v,j)=>`<span class="badge" style="background:rgba(255,255,255,.22);color:#fff;font-size:.88rem;padding:6px 12px">${j+1}. ${v}</span>`).join("")}</div>`:"";
+ return`<div class="top"><div class="row" style="flex-wrap:nowrap">${Mark()}<b style="font:600 1.25rem Fraunces,Georgia,serif">Firstmile</b></div>${last?"":`<button class="ghost" onclick="obgo(2)">Skip</button>`}</div>
+ <section class="hero2" style="min-height:min(72vh,580px)" aria-label="Introduction ${i+1} of 3"><div><p class="eyebrow">${i+1} of 3</p><h1 style="margin:8px 0 12px;color:#fff">${s.h}</h1><p style="max-width:34ch;font-size:1.05rem">${s.p}</p>${x}
+ <div class="row" style="margin-top:20px" aria-hidden="true">${[0,1,2].map(j=>`<span style="width:${j===i?26:8}px;height:8px;border-radius:9px;background:#fff;opacity:${j===i?1:.45}"></span>`).join("")}</div>
+ <div class="row">${last?`<button class="btn" onclick="go('signin')">Sign in or create account</button><button class="btn sec" onclick="guest()">Try the sample trip</button>`:`<button class="btn" onclick="obgo(${i+1})">Next</button>${i?`<button class="btn sec" onclick="obgo(${i-1})">Back</button>`:""}`}</div></div>${Scene()}</section>`}
+function sinTab(m){OB.mode=m;OB.stage="phone";OB.err="";render()}
+function sendCode(){const p=(document.getElementById("ph").value||"").replace(/\D/g,"");const n=document.getElementById("sn");if(n)OB.name=n.value||"";OB.phone=p;
+ if(!/^[6-9]\d{9}$/.test(p)){OB.err="Enter a 10-digit mobile number.";render();document.getElementById("ph")?.focus();return}OB.err="";OB.stage="otp";render();document.getElementById("otp")?.focus()}
+function verify(){const c=(document.getElementById("otp").value||"").trim();if(c!=="123456"){OB.err="That code didn’t match. Retry, or use a different method.";render();document.getElementById("otp")?.focus();return}signedIn("phone","••••"+OB.phone.slice(-4))}
+function signedIn(method,hint){S.user={method,hint};S.guest=false;S.ob.seen=true;if(OB.name.trim())DATA.user.name=OB.name.trim();OB.stage="phone";OB.err="";OB.phone="";OB.setup=0;toast("Signed in (demo)");go("setup");render()}
+function googleDemo(){modal(`<h2>Continue with Google (demo)</h2><p class="muted">This is a mock. No Google account is used and nothing is sent anywhere.</p><div class="row"><button class="btn" onclick="closeModal();signedIn('google','demo account')">Continue as demo user</button><button class="btn sec" onclick="closeModal()">Cancel</button></div>`)}
+function signOut(){S.user=null;S.guest=true;toast("Signed out (demo)");go("home");render()}
+function SignIn(){const up=OB.mode==="up",e=OB.err,otp=OB.stage==="otp";
+ const body=otp?`<p>Enter the 6-digit code sent to <b>+91 ••••••${OB.phone.slice(-4)}</b>.</p><p class="muted" style="margin:4px 0 14px">Demo: the code is <b style="color:var(--ink)">123456</b>. No message is sent.</p>
+ ${F("otp","6-digit code",`<input id="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" ${e?'aria-invalid="true" aria-describedby="otp-e"':""} onkeydown="if(event.key==='Enter')verify()">`,e)}
+ <div class="row"><button class="btn" onclick="verify()">Verify</button><button class="btn sec" onclick="toast('Demo: no code was sent')">Resend code</button></div>
+ <div class="row" style="margin-top:14px"><button class="ghost" onclick="OB.stage='phone';OB.err='';render()">Use a different method</button></div>`
+ :`${up?F("sn","Your name (optional)",`<input id="sn" value="${esc(OB.name)}" autocomplete="given-name" placeholder="What should we call you?">`):""}
+ ${F("ph","Mobile number",`<div class="row" style="flex-wrap:nowrap"><span class="chip" style="display:grid;place-items:center">+91</span><input id="ph" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="12" value="${esc(OB.phone)}" ${e?'aria-invalid="true" aria-describedby="ph-e"':""} style="font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;min-height:48px;width:100%" onkeydown="if(event.key==='Enter')sendCode()"></div>`,e)}
+ <button class="btn" onclick="sendCode()">Send code</button><p class="muted" style="text-align:center;margin:14px 0">or</p><button class="btn sec" style="width:100%" onclick="googleDemo()">Continue with Google (demo)</button>`;
+ return`<div class="top"><div class="row" style="flex-wrap:nowrap">${Mark()}<b style="font:600 1.25rem Fraunces,Georgia,serif">Firstmile</b></div><button class="ghost" onclick="go('welcome')">← Back</button></div>
+ <h1 style="margin-bottom:14px">${up?"Create your account":"Welcome back"}</h1><div class="banner" role="note" style="margin-bottom:16px"><b>◌ Demo sign-in</b><span>No real account is created and nothing leaves this page.</span></div>
+ <div class="chips" role="group" aria-label="Sign in or create account" style="margin-bottom:16px"><button class="chip" aria-pressed="${!up}" onclick="sinTab('in')">Sign in</button><button class="chip" aria-pressed="${up}" onclick="sinTab('up')">Create account</button></div>
+ <section class="card">${body}</section><p style="text-align:center;margin-top:18px"><button class="ghost" onclick="guest()">Continue as guest with the sample trip</button></p>`}
+function obsetup(n){OB.setup=n;render()}
+function Setup(){const st=OB.setup,hd=`<div class="top"><div class="row" style="flex-wrap:nowrap">${Mark()}<b style="font:600 1.25rem Fraunces,Georgia,serif">Firstmile</b></div></div><p class="eyebrow">Setup · ${st+1} of 2</p><div class="stepper" aria-hidden="true"><span class="on"></span><span class="${st?"on":""}"></span></div>`;
+ if(!st)return`${hd}<h1 style="margin:8px 0 8px">Your travel style</h1><p class="muted" style="margin-bottom:16px">Optional. These pre-fill new trips and you can change them in Settings.</p><section class="card"><p class="lbl" id="sp">Preferences</p><div class="chips" role="group" aria-labelledby="sp" style="margin:8px 0 16px">${PREFS.map(p=>`<button type="button" class="chip" aria-pressed="${S.def.prefs.includes(p)}" onclick="dpref(this,'${p}')">${p}</button>`).join("")}</div>
+ ${F("sb","Budget band",`<select id="sb" onchange="S.def.budget=this.value"><option value="">Not set</option>${BUDGETS.map(b=>`<option ${S.def.budget===b?"selected":""}>${b}</option>`).join("")}</select>`)}
+ <div class="row"><button class="btn" onclick="obsetup(1)">Continue</button><button class="ghost" onclick="obsetup(1)">Skip for now</button></div></section>`;
+ return`${hd}<h1 style="margin:8px 0 8px">Your choices</h1><p class="muted" style="margin-bottom:16px">Each choice is separate and off or on only because you say so.</p><section class="card">
+ <label class="chk" style="cursor:pointer"><input type="checkbox" ${AI.consent?"checked":""} onchange="AI.consent=this.checked" style="width:22px;height:22px;accent-color:var(--teal)"><span><b>Let the Companion read my trip details</b><br><span class="muted">Legs, times, preferences, saved places and return plan. Off unless you turn it on.</span></span></label>
+ <label class="chk" style="cursor:pointer;margin-top:8px"><input type="checkbox" ${S.def.remind?"checked":""} onchange="S.def.remind=this.checked" style="width:22px;height:22px;accent-color:var(--teal)"><span><b>Turn on reminders for my own plans</b><br><span class="muted">Only ever sent to you. Prototype: none are delivered yet.</span></span></label>
+ <p class="muted" style="margin:14px 0">Firstmile doesn’t ask for your location. Change any of this in Settings.</p><div class="row"><button class="btn" onclick="toast('You’re all set');go('home');render()">Finish and start</button><button class="ghost" onclick="obsetup(0)">Back</button></div></section>`}
+const GuestBanner=()=>`<div class="banner" role="note"><b>You’re exploring as a guest</b><span>This is a sample trip. Sign in to keep your own plans in this session.</span><div class="row"><button class="btn sec" onclick="go('signin')">Sign in or create account</button><button class="btn sec" onclick="newTrip()">Start my own trip</button></div></div>`;
+const AccountSec=()=>`<section class="card"><h2>Account</h2>${S.user?`<p style="margin-top:6px">Signed in with ${S.user.method==="google"?"Google":"phone"} (demo): ${esc(S.user.hint)}</p><p class="muted">No real account exists. This clears when you refresh.</p><div class="row" style="margin-top:12px"><button class="btn sec" onclick="signOut()">Sign out</button><button class="chip" onclick="OB.step=0;go('welcome')">Replay welcome tour</button></div>`:`<p style="margin-top:6px">${S.guest?"You’re exploring as a guest.":"Not signed in."}</p><div class="row" style="margin-top:12px"><button class="btn" onclick="go('signin')">Sign in or create account</button><button class="chip" onclick="OB.step=0;go('welcome')">Replay welcome tour</button></div>`}</section>`;
+
+// ===== WORK-TRIP FREE-TIME PLANNER (deterministic, sample data) =====
+const FT={d:null,tid:null,plan:null,late:0,msg:null,why:null,err:{}};
+const MINDW={Food:30,Cafe:30,Culture:45,Nature:30};
+const ftTravel=(a,b)=>8+Math.round(Math.abs(a-b)*4);
+function ftSched(f,stops,late){let t=tmin(f.start)+(late??FT.late),pos=0;const rows=[];
+ stops.forEach(s=>{const p=PL(s.p),tr=ftTravel(pos,p.km),arr=t+tr;rows.push({p,tr,arr,dw:s.dw,lv:arr+s.dw});t=arr+s.dw;pos=p.km});
+ const back=stops.length?ftTravel(pos,0):0;return{rows,back,end:t+back,limit:tmin(f.end)-f.buf}}
+const ftOk=(f,s,late)=>{const x=ftSched(f,s,late);return x.end<=x.limit};
+const ftCity=(t,f)=>f.city||(PLC.includes(t.to)?t.to:"Roorkee");
+function ftInit(t){if(FT.d&&FT.tid===t.id)return;FT.tid=t.id;FT.plan=null;FT.why=null;FT.msg=null;FT.late=0;FT.err={};
+ const z=t.legs[t.legs.length-1],same=z&&z.arr&&z.arr.length>10,want=[...new Set(t.prefs.flatMap(p=>PM[p]||[]))];
+ FT.d={day:same?z.arr.slice(0,10):t.depart,start:same?hm(tmin(z.arr.slice(11,16))+60):"17:00",end:"20:00",from:"",to:t.stay||"",ints:want,bud:{Budget:1,"Mid-range":2,Comfort:3}[t.budget]||0,buf:S.def.buf||30,city:PLC.includes(t.to)?t.to:"Roorkee"}}
+function ftGen(t,f){const cats=f.ints.length?f.ints:CATS.slice(1),pool=PLACES.filter(p=>p.city===f.city&&cats.includes(p.cat)&&(!f.bud||p.bud<=f.bud)).sort((a,b)=>cats.indexOf(a.cat)-cats.indexOf(b.cat)||a.km-b.km);let st=[];
+ for(const p of pool){if(st.length>=4)break;for(const dw of[Math.max(MINDW[p.cat],Math.min(p.vm,60)),MINDW[p.cat]]){const tent=[...st,{p:p.id,dw}].sort((a,b)=>PL(a.p).km-PL(b.p).km);if(ftOk(f,tent,0)){st=tent;break}}}
+ return{st,pool}}
+function ftWhy(f,pool){const avail=tmin(f.end)-f.buf-tmin(f.start);
+ if(!pool.length)return`No sample places in ${f.city} match your interests and budget. Try more categories or a higher budget.`;
+ const n=pool[0],need=2*ftTravel(0,n.km)+MINDW[n.cat],gap=need-avail;
+ return`Only ${Math.max(0,avail)} minutes remain after reserving your ${f.buf}-minute buffer. The nearest match, ${n.n}, needs about ${need} minutes including travel and a ${MINDW[n.cat]}-minute visit. Try ending your window about ${Math.ceil(Math.max(gap,5)/5)*5} minutes later, or start earlier.`}
+function ftset(k,v){FT.d[k]=v;render()}
+function ftint(el,c){const a=FT.d.ints,i=a.indexOf(c);i<0?a.push(c):a.splice(i,1);el.setAttribute("aria-pressed",i<0)}
+function ftplan(){const f=FT.d,e={};if(!f.start)e.start="Choose a start time.";if(!f.end)e.end="Choose an end time.";if(f.start&&f.end&&tmin(f.end)<=tmin(f.start)+f.buf)e.end="Your window needs to be longer than your buffer. Choose a later end time.";FT.err=e;
+ if(Object.keys(e).length){FT.plan=null;render();return}
+ const t=getTrip(S.active),g=ftGen(t,f);FT.late=0;FT.msg=null;if(g.st.length){FT.plan=g.st;FT.why=null}else{FT.plan=null;FT.why=ftWhy(f,g.pool)}render();document.getElementById("ftr")?.scrollIntoView?.({block:"start"})}
+function ftTry(next,what){if(!ftOk(FT.d,next)){const x=ftSched(FT.d,next),m=hm(x.end),l=hm(x.limit);toast(`${what} would put you back at ${m}, after ${l}. Not applied.`);return false}FT.plan=next;FT.msg=null;render();return true}
+function ftrm(i){FT.plan=FT.plan.filter((_,j)=>j!==i);FT.msg=null;if(!FT.plan.length){FT.plan=null;FT.why="You removed every stop. Plan again to start over."}render()}
+function ftmove(i,d){const a=[...FT.plan],j=i+d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];ftTry(a,"That order")}
+function ftdw(i,d){const a=FT.plan.map(s=>({...s})),p=PL(a[i].p);a[i].dw=Math.min(120,Math.max(MINDW[p.cat],a[i].dw+d));if(a[i].dw===FT.plan[i].dw)return;ftTry(a,d>0?"A longer visit":"That change")}
+function ftadd(){const id=document.getElementById("fa").value;if(!id)return;const a=[...FT.plan,{p:id,dw:Math.max(MINDW[PL(id).cat],Math.min(PL(id).vm,60))}].sort((x,y)=>PL(x.p).km-PL(y.p).km);ftTry(a,`Adding ${PL(id).n}`)}
+function ftlate(m){FT.late=m;FT.msg=null;let a=[...FT.plan],drop=[];while(a.length&&!ftOk(FT.d,a)){drop.push(PL(a.pop().p).n)}
+ if(drop.length)FT.msg=`Running late by ${m} min: dropped ${drop.join(", ")} to keep you back on time.`;FT.plan=a.length?a:null;if(!a.length)FT.why=`At ${m} minutes late no stop fits before your buffer. Reset, or plan again with a later end time.`;render()}
+function ftconfirm(){const t=getTrip(S.active),x=ftSched(FT.d,FT.plan);modal(`<h2>Add to your itinerary?</h2><p class="muted">${D(FT.d.day)} · nothing else changes.</p><ul style="margin:0;padding-left:18px">${x.rows.map(r=>`<li><b>${hm(r.arr)}</b> ${r.p.n}</li>`).join("")}</ul><div class="row"><button class="btn" onclick="ftcommit()">Add ${x.rows.length} stop${x.rows.length>1?"s":""}</button><button class="btn sec" onclick="closeModal()">Cancel</button></div>`)}
+function ftcommit(){const t=getTrip(S.active),x=ftSched(FT.d,FT.plan);t.extra=t.extra||[];let n=0;x.rows.forEach(r=>{if(!t.extra.some(e=>e.p===r.p.id&&e.d===FT.d.day)){t.extra.push({p:r.p.id,d:FT.d.day,tm:hm(r.arr)});n++}});closeModal();toast(n?`Added ${n} stop${n>1?"s":""} to your itinerary`:"Already in your itinerary");render()}
+function ftsync(){const t=getTrip(S.active),f=FT.d,x=ftSched(f,FT.plan||[]);if(!t.rp){t.rp=RPDEF(t);t.rp.day=f.day;t.rp.target=f.end;t.rp.buf=f.buf}else{t.rp.day=f.day;t.rp.target=f.end;t.rp.buf=f.buf}
+ t.rp.changed=[`Synced with your free-time plan: be back by ${f.end} on ${D(f.day)}.`,...(FT.late?[`Running late by ${FT.late} min. Your plan now ends at ${hm(x.end)}.`]:[])];toast("Return plan updated");go("return")}
+function FreeTime(){const t=getTrip(S.active);
+ if(!t)return`${Top()}<h1>Free-time planner</h1><div class="empty" style="margin-top:18px"><p>Create a trip first, then fit places into your free time.</p><div class="row" style="justify-content:center"><button class="btn" onclick="newTrip()">Start a trip</button><button class="btn sec" onclick="trySample()">Try sample trip</button></div></div>`;
+ ftInit(t);const f=FT.d,e=FT.err,x=FT.plan?ftSched(f,FT.plan):null,ch=(vals,cur,k,lab)=>vals.map(v=>`<button class="chip" aria-pressed="${v===cur}" onclick="ftset('${k}',${typeof v==="number"?v:`'${v}'`})">${lab(v)}</button>`).join("");
+ const rest=PLACES.filter(p=>p.city===f.city&&!(FT.plan||[]).some(s=>s.p===p.id));
+ const form=`<section class="card"><p class="muted" style="margin-bottom:16px">Tell us your window. We’ll fit places in and keep you back on time.</p>
+ <div class="two">${sl("fd","Day",f.day,"FT.d.day=this.value",Object.fromEntries(tripDays(t).map(v=>[v,D(v)])))}${sl("fc","City (sample places)",f.city,"ftset('city',this.value)",Object.fromEntries(PLC.map(c=>[c,c])))}</div>
+ ${!PLC.includes(t.to)?`<p class="muted" style="margin:-6px 0 14px">Sample places exist for ${PLC.join(", ")} only. ${esc(t.to)} isn’t covered yet.</p>`:""}
+ <div class="two">${F("fs","Free from",`<input id="fs" type="time" value="${esc(f.start)}" ${e.start?'aria-invalid="true"':""} oninput="FT.d.start=this.value">`,e.start)}${F("fe","Back by",`<input id="fe" type="time" value="${esc(f.end)}" ${e.end?'aria-invalid="true"':""} oninput="FT.d.end=this.value">`,e.end)}</div>
+ <div class="two">${F("ff","Start point (optional)",`<input id="ff" value="${esc(f.from)}" placeholder="Where you’ll set off" oninput="FT.d.from=this.value">`)}${F("ft2","Return point (optional)",`<input id="ft2" value="${esc(f.to)}" placeholder="Your stay" oninput="FT.d.to=this.value">`)}</div>
+ <p class="lbl" id="fi">Interests</p><div class="chips" role="group" aria-labelledby="fi" style="margin:8px 0 16px">${CATS.slice(1).map(c=>`<button type="button" class="chip" aria-pressed="${f.ints.includes(c)}" onclick="ftint(this,'${c}')">${c}</button>`).join("")}</div>
+ <p class="lbl">Budget (up to)</p><div class="chips" style="margin:8px 0 16px">${ch([0,1,2,3],f.bud,"bud",v=>BUDG[v])}</div>
+ ${sl("fb","Time buffer",f.buf,"FT.d.buf=+this.value",{15:"15 minutes",20:"20 minutes",30:"30 minutes (suggested)",45:"45 minutes",60:"60 minutes"})}
+ <button class="btn" onclick="ftplan()">${FT.plan?"Plan again":"Plan my free time"}</button></section>`;
+ let res="";
+ if(FT.plan){res=`<section class="card" id="ftr"><h2>Your plan</h2><div class="row" style="margin:8px 0"><span class="badge b-live">✓ Back by ${hm(x.end)}</span>${badge("est")}${badge("sample")}</div>
+ <p class="muted">Window ${f.start}–${f.end}, with a ${f.buf}-minute buffer: you need to be back by <b style="color:var(--ink)">${hm(x.limit)}</b>. This plan gets you back ${x.limit-x.end} min earlier.${FT.late?` Running late by ${FT.late} min is included.`:""}</p>
+ ${FT.msg?`<div class="banner" role="status" style="margin-top:12px"><span>${FT.msg}</span></div>`:""}
+ <div class="banner" style="margin-top:12px"><span><b>Opening hours: Not available.</b> We can’t confirm stops are open. Check before you go. Travel times assume you start and end near the centre.</span></div>
+ <ol class="tl" style="margin-top:12px">${x.rows.map((r,i)=>`<li style="grid-template-columns:96px 1fr"><time>${hm(r.arr)}–${hm(r.lv)}</time><div><b>${r.p.n}</b> <span class="badge b-est">${r.p.cat}</span><br><small class="muted">Visit ${r.dw} min · travel here ${r.tr} min (estimated)</small>
+ <div class="row" style="margin-top:8px"><button class="chip" aria-label="Move ${r.p.n} earlier" onclick="ftmove(${i},-1)" ${i?"":"disabled"}>↑</button><button class="chip" aria-label="Move ${r.p.n} later" onclick="ftmove(${i},1)" ${i<x.rows.length-1?"":"disabled"}>↓</button><button class="chip" aria-label="Shorten visit at ${r.p.n}" onclick="ftdw(${i},-15)">− 15 min</button><button class="chip" aria-label="Extend visit at ${r.p.n}" onclick="ftdw(${i},15)">+ 15 min</button><button class="chip" aria-label="Remove ${r.p.n}" onclick="ftrm(${i})">Remove</button><button class="chip" onclick="go('place/${r.p.id}')">Details</button></div></div></li>`).join("")}
+ <li style="grid-template-columns:96px 1fr"><time>${hm(x.end)}</time><div><b>Back at ${esc(f.to||"your return point")}</b><br><small class="muted">Travel back ${x.back} min (estimated)</small></div></li></ol>
+ ${rest.length?`<div class="row" style="margin-top:12px;flex-wrap:nowrap"><label for="fa" class="sr">Add a stop</label><select id="fa" style="flex:1;min-width:0;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px;min-height:48px"><option value="">Add a stop…</option>${rest.map(p=>`<option value="${p.id}">${p.n} (${p.cat})</option>`).join("")}</select><button class="btn sec" onclick="ftadd()">Add</button></div>`:""}
+ <p class="lbl" style="margin-top:16px">Running late?</p><div class="chips" style="margin-top:8px">${[15,30,45].map(m=>`<button class="chip" aria-pressed="${FT.late===m}" onclick="ftlate(${m})">+ ${m} min</button>`).join("")}<button class="chip" onclick="FT.late=0;ftplan()">Reset</button></div>
+ <div class="row" style="margin-top:16px"><button class="btn" onclick="ftconfirm()">Add to my itinerary</button><button class="btn sec" onclick="ftsync()">${t.rp?"Update return plan":"Create return plan"}</button></div></section>`}
+ else if(FT.why)res=`<section class="card" id="ftr"><h2>No plan fits yet</h2><div class="banner" role="status" style="margin-top:10px"><span>${FT.why}</span></div></section>`;
+ else res=`<div class="empty"><p><b style="color:var(--ink)">Your plan will appear here</b><br>We only show plans that get you back on time.</p></div>`;
+ return`${Top(Back("trip/"+t.id,"← Trip"))}<p class="eyebrow">${esc(t.from)} → ${esc(t.to)}</p><h1 style="margin:6px 0 16px">Free-time planner</h1><div class="grid2" style="align-items:start">${form}<div class="stack">${res}</div></div><p class="muted" style="font-size:.88rem;margin-top:16px">Plans use simple rules, not AI. Distances, visit times and travel are sample estimates, not live.</p>`}
+
+// ===== SHELL =====
+function render(){const[v0,a]=location.hash.slice(1).split("/");let v=VIEWS[v0]?v0:"home";if(!S.ob.seen&&!PRE.includes(v))v="welcome";
+ if((v==="new"||v==="edit")&&!W)v="trips";if(["trip","journey","lastmile"].includes(v)&&!getTrip(a))v="trips";if(v==="place"&&!PL(a))v="explore";
+ const nk={new:"trips",edit:"trips",trip:"trips",journey:"trips",lastmile:"trips",place:"explore",saved:"home",freetime:"explore"}[v]||v;
+ document.body.classList?.toggle?.("pre",PRE.includes(v));document.getElementById("nav").innerHTML=`<div class="brand">${Mark()}Firstmile</div>`+NAV.map(n=>`<button onclick="go('${n[0]}')" ${nk===n[0]?'aria-current="page"':""}>${svg(n[2])}${n[1]}</button>`).join("");
+ document.getElementById("main").innerHTML=VIEWS[v](a);const h=document.querySelector("#main h1");if(h){h.tabIndex=-1;document.title=h.textContent+" · Firstmile"}return h}
+addEventListener("hashchange",()=>{const h=render();scrollTo(0,0);if(h)h.focus({preventScroll:true})});render();
+</script></body></html>
